@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
 import { TextField } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import styled from 'styled-components'; //CSS-IN_JS

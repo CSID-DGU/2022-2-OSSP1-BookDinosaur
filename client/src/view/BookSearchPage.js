@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
 import SearchResultCard from '../component/SearchResultCard';
 import styled from 'styled-components'; //CSS-IN_JS
 import { useLocation } from 'react-router-dom';
