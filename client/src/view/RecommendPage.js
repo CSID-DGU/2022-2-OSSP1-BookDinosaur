@@ -24,15 +24,6 @@ const Spacing = styled.div`
     height: 30px;
 `;
 
-/*
-const BookWrap = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-`;
-*/
-
 const BookList = styled.div`
     display: flex;
     flex-wrap: wrap;

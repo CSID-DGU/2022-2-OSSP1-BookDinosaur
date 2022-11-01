@@ -17,12 +17,10 @@ import './SignUp.css'
 
 const START_AGE = 10;
 const END_AGE = 100;
-// const COUNT_GENRE = ['총류(기타)', '철학', '종교', '사회과학', '자연과학', '기술과학', '예술', '언어', '문학', '역사'];
 
 const MenuProps = {
     PaperProps: {
         style: {
-            // maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
             maxWidth: 60,
             maxHeight: 240,
         },
