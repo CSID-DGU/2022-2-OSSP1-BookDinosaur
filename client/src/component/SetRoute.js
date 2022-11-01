@@ -16,7 +16,7 @@ import AllReport from '../view/AllReport';
 //Route 관리 코드
 const SetRoute = () => {
   // eslint-disable-next-line
-  const [cookies, setCookie, removeCookie] = useCookies(['user']);
+  const cookies = useCookies(['user']);
 
   const path = window.location.pathname;
 

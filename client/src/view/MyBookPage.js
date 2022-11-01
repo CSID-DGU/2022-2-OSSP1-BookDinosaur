@@ -18,7 +18,7 @@ const Wrapper = styled.div`
 
 export default function MyBookPage() {
     // eslint-disable-next-line
-    const [cookies, setCookie, removeCookie] = useCookies(['user']);
+    const cookies = useCookies(['user']);
     const [reportList, setReportList] = useState([]);
     const navigate = useNavigate();
 

@@ -54,9 +54,9 @@ const EditPage = () => {
     const classes = useStyles();
 
     // eslint-disable-next-line
-    const [cookies, setCookie, removeCookie] = useCookies(['user']);
-    const [isbn, setIsbn] = useState(location?.state?.isbn)
-    const [bookInfo, setBookInfo] = useState({
+    const cookies = useCookies(['user']);
+    const isbn = useState(location?.state?.isbn)
+    const bookInfo = useState({
         title: location?.state?.title,
         author: location?.state?.authors[0],
         publisher: location?.state?.publisher,

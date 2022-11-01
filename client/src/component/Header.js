@@ -28,7 +28,7 @@ const Header = () => {
 
     const [bookReportCount, setBookReportCount] = useState(0)
     // eslint-disable-next-line
-    const [cookies, setCookie, removeCookie] = useCookies(['user']);
+    const [cookies, removeCookie] = useCookies(['user']);
 
     axios.get('/api/db/users/bookreports/' + cookies?.user?.userId).then((res) => {
         setBookReportCount(res.data.data?.length || 0);

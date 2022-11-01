@@ -42,7 +42,7 @@ const BookList = styled.div`
    
 const RecommendPage = () => {
     // eslint-disable-next-line
-    const [cookies, setCookie, removeCookie] = useCookies(['user']);
+    const cookies = useCookies(['user']);
 
     return(
         <Wrapper>
