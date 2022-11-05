@@ -301,8 +301,8 @@ router.get('/api/recommend/svd', async (req, res) => {
             // 받아온 데이터는 추천 순위 인덱스 정보이므로 해당 인덱스에 해당하는 isbn을 찾아 실제 도서 정보를 넘겨줘야 함
             const recommendIndex = JSON.parse(data);
             var recommendIsbn = [];
-            for (var i=0;i<recommendIndex.length;i++) {
-                recommendIsbn.push(isbnList[0][recommendIndex[i]]);
+            for (const element of recommendIndex) {
+                recommendIsbn.push(isbnList[0][element]);
             }
 
             // isbn 배열로 도서를 찾아서 도서 정보 리턴해줌
@@ -350,9 +350,9 @@ router.get('/api/recommend/cos', async (req, res) => {
         var userList = [];
         var preferMat = [];
 
-        for (var i=0; i<userData.length; i++) {
-            userList.push(userData[i].userid); 
-            preferMat.push(userData[i].preference.split(",")); 
+        for (const element of userData) {
+            userList.push(element.userid); 
+            preferMat.push(element.preference.split(",")); 
         }
 
         var myData = await pool.query('SELECT preference FROM BOOKWEB.UserTB WHERE userid = ?', [req.session.userId]);
@@ -366,8 +366,8 @@ router.get('/api/recommend/cos', async (req, res) => {
         process.stdout.on('data', async function (data) {
             const recommendIndex = JSON.parse(data);
             var similarUser = [];
-            for (var i=0; i<recommendIndex.length; i++) {
-                similarUser.push(userList[recommendIndex[i]]); 
+            for (const element of recommendIndex) {
+                similarUser.push(userList[element]); 
             }
 
             //내가 독후감을 쓴 책의 isbn 목록 가져오기
@@ -389,11 +389,11 @@ router.get('/api/recommend/cos', async (req, res) => {
             }
 
             function RatingList(arr) { //[["isbn", raing1, rating2, ....], ...] 이렇게 추가함
-                for (var i=0; i<arr.length; i++) {
+                for (const element of arr) {
                     var inBookList = 0;
                     for (var j=0; j<bookList.length; j++) {
-                        if (bookList[j][0] == arr[i].isbn) { //이미 동일한 isbn이 리스트에 있을 시
-                            bookList[j].push(arr[i].rating); //뒤에 rating 추가
+                        if (bookList[j][0] == element.isbn) { //이미 동일한 isbn이 리스트에 있을 시
+                            bookList[j].push(element.rating); //뒤에 rating 추가
                             inBookList = 1;
                             break;
                         }
