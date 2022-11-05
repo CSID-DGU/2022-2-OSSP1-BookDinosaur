@@ -388,15 +388,15 @@ router.get("/api/recommend/svd", async (req, res) => {
 
     dataMat.push(sessionUserRating); // 현재 추천해줄 유저의 평점 정보 추가
 
-    const process = spawn("python", ["python/svd.py", JSON.stringify(dataMat)]);
-    // stdout에 대한 콜백
-    process.stdout.on("data", async function (data) {
-      // 받아온 데이터는 추천 순위 인덱스 정보이므로 해당 인덱스에 해당하는 isbn을 찾아 실제 도서 정보를 넘겨줘야 함
-      const recommendIndex = JSON.parse(data);
-      var recommendIsbn = [];
-      for (var i = 0; i < recommendIndex.length; i++) {
-        recommendIsbn.push(isbnList[recommendIndex[i]]);
-      }
+        const process = spawn('python', ['python/svd.py', JSON.stringify(dataMat)]);
+        // stdout에 대한 콜백
+        process.stdout.on('data', async function (data) {
+            // 받아온 데이터는 추천 순위 인덱스 정보이므로 해당 인덱스에 해당하는 isbn을 찾아 실제 도서 정보를 넘겨줘야 함
+            const recommendIndex = JSON.parse(data);
+            var recommendIsbn = [];
+            for (const element of recommendIndex) {
+                recommendIsbn.push(isbnList[element]);
+            }
 
       // isbn 배열로 도서를 찾아서 도서 정보 리턴해줌
       // 모든 책을 다 읽은 경우 내용이 배열에 내용이 없을 수 있음, 프론트쪽에서 처리하여 '더이상 추천해줄 도서가 없습니다.'와 같이 메시지를 출력해주는 것이 좋을 듯
@@ -451,10 +451,10 @@ router.get("/api/recommend/cos", async (req, res) => {
     var userList = [];
     var preferMat = [];
 
-    for (var i = 0; i < userData.length; i++) {
-      userList.push(userData[i].userid);
-      preferMat.push(userData[i].preference.split(","));
-    }
+        for (const element of userData) {
+            userList.push(element.userid); 
+            preferMat.push(element.preference.split(",")); 
+        }
 
     var myData = await pool.query(
       "SELECT preference FROM BOOKWEB.UserTB WHERE userid = ?",
@@ -464,19 +464,15 @@ router.get("/api/recommend/cos", async (req, res) => {
 
     var result;
 
-    const process = spawn("python", [
-      "python/cos.py",
-      JSON.stringify(preferMat),
-      JSON.stringify(myPrefer),
-    ]);
-    process.stdout.setEncoding("utf8");
-    // stdout에 대한 콜백
-    process.stdout.on("data", async function (data) {
-      const recommendIndex = JSON.parse(data);
-      var similarUser = [];
-      for (var i = 0; i < recommendIndex.length; i++) {
-        similarUser.push(userList[recommendIndex[i]]);
-      }
+        const process = spawn('python', ['python/cos.py', JSON.stringify(preferMat), JSON.stringify(myPrefer)]);
+        process.stdout.setEncoding('utf8');
+        // stdout에 대한 콜백
+        process.stdout.on('data', async function (data) {
+            const recommendIndex = JSON.parse(data);
+            var similarUser = [];
+            for (const element of recommendIndex) {
+                similarUser.push(userList[element]); 
+            }
 
       //내가 독후감을 쓴 책의 isbn 목록 가져오기
       var data = await pool.query(
@@ -502,23 +498,20 @@ router.get("/api/recommend/cos", async (req, res) => {
         similar.push(data);
       }
 
-      function RatingList(arr) {
-        //[["isbn", raing1, rating2, ....], ...] 이렇게 추가함
-        for (var i = 0; i < arr.length; i++) {
-          var inBookList = 0;
-          for (var j = 0; j < bookList.length; j++) {
-            if (bookList[j][0] == arr[i].isbn) {
-              //이미 동일한 isbn이 리스트에 있을 시
-              bookList[j].push(arr[i].rating); //뒤에 rating 추가
-              inBookList = 1;
-              break;
+            function RatingList(arr) { //[["isbn", raing1, rating2, ....], ...] 이렇게 추가함
+                for (const element of arr) {
+                    var inBookList = 0;
+                    for (var j=0; j<bookList.length; j++) {
+                        if (bookList[j][0] == element.isbn) { //이미 동일한 isbn이 리스트에 있을 시
+                            bookList[j].push(element.rating); //뒤에 rating 추가
+                            inBookList = 1;
+                            break;
+                        }
+                    }
+                    if (inBookList == 0) //동일한 isbn이 리스트에 없을 시
+                        bookList.push([arr[i].isbn, arr[i].rating]); //isbn과 rating을 리스트로 추가
+                }
             }
-          }
-          if (inBookList == 0)
-            //동일한 isbn이 리스트에 없을 시
-            bookList.push([arr[i].isbn, arr[i].rating]); //isbn과 rating을 리스트로 추가
-        }
-      }
 
       for (var i = 0; i < NUMOFUSER; i++) {
         RatingList(similar[i]);
@@ -597,3 +590,4 @@ router.get("/api/recommend/cos", async (req, res) => {
 });
 
 module.exports = router;
+
