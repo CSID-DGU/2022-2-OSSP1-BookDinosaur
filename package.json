@@ -3,7 +3,8 @@
     "start": "cd server && node server.js",
     "server": "cd server && nodemon server.js",
     "front": "cd client && npm start",
-    "dev": "concurrently \"npm run server\" \"npm run front\""
+    "dev": "concurrently \"npm run server\" \"npm run front\"",
+    "test": "jest"
   },
   "dependencies": {
     "axios": "^0.27.2",
@@ -15,7 +16,8 @@
     "express-session": "^1.17.3",
     "mariadb": "^3.0.2",
     "memorystore": "^1.6.7",
-    "mysql2": "^2.3.3"
+    "mysql2": "^2.3.3",
+    "jest": ""
   },
   "devDependencies": {
     "nodemon": "^2.0.16"
