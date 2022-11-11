@@ -68,10 +68,23 @@ const SignUp = () => {
     return renderResult;
   }
 
-  const checkId = () => { return id !== "" ? (3 < id.length) && (id.length < 17) ? false : true : false; }
-  const checkNick = () => { return nickName !== "" ? (1 < nickName.length) && (nickName.length < 11) ? false : true : false; }
-  const checkPw = () => { return pw !== "" ? (7 < pw.length) && (pw.length < 17) ? false : true : false; }
+  const checkId = () => {
+    if (id !== "")
+      return !(3 < id.length && id.length < 17);
+    return false;
+  }
 
+  const checkNick = () => {
+    if (nickName != "")
+      return !(1 < nickName.length && nickName.length < 11)
+    return false;
+  }
+
+  const checkPw = () => {
+    if (pw !== "")
+      return !((7 < pw.length) && (pw.length < 17));
+    return false;
+  }
 
   const onClickSignUp = () => {
     if (id === "" || checkId()) {
@@ -209,8 +222,8 @@ const SignUp = () => {
           error={checkPw()}
           helperText={checkPw() ? '8~16자 사이로 입력해주세요' : ''} />
         <TextField
-          error={pwConfirm !== "" ? pw === pwConfirm ? false : true : false}
-          helperText={pwConfirm !== "" ? pw === pwConfirm ? '' : '패스워드를 확인해주세요' : ''}
+          error={pwConfirm !== "" ? (pw !== pwConfirm) : false}
+          helperText={(pwConfirm !== "" && pw !== pwConfirm) ? '패스워드를 확인해주세요' : ''}
           type="password" label="패스워드 확인" onChange={onChangePwConfirm}
         />
       </div>
