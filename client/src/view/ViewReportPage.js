@@ -6,33 +6,33 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 
 const Wrapper = styled.div`
-    width: 70rem;
-    margin: 2rem auto;
-    border-radius: 4px;
-    background-color: var(--white-color);
-    padding: 0.5rem 0.5rem 2rem;
-    overflow: hidden;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  width: 70rem;
+  margin: 2rem auto;
+  border-radius: 4px;
+  background-color: var(--white-color);
+  padding: 0.5rem 0.5rem 2rem;
+  overflow: hidden;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 `;
 
 const Spacing = styled.div`
-    width: 100%;
-    height: 10px;
+  width: 100%;
+  height: 10px;
 `;
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-      '& .MuiTextField-root': {
-        margin: theme.spacing(1),
-        width: '25ch',
-      },
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: '25ch',
     },
-  }));
+  },
+}));
 
 //isbn과 userid를 받아 책 정보와 독후감 정보를 출력함
 const ViewReportPage = () => {
-    const classes = useStyles();
-    const { state } = useLocation(); //isbn과 userid를 받아옴
+  const classes = useStyles();
+  const { state } = useLocation(); //isbn과 userid를 받아옴
 
     const [bookInfo, setBookInfo] = useState({
         authors: '',
@@ -74,39 +74,39 @@ const ViewReportPage = () => {
         })
     };
 
-    //isbn, userid로 독후감 데이터를 받아옴
-    useEffect(() => {
-        try {
-            axios.get('/api/db/bookreports/' + state.isbn + '/' + state.userid)
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                onSetReportInfo(data);
-            });
-        } catch (err) {
-            console.log(err);
-        }
-    }, [state.isbn, state.userid]);
+  //isbn, userid로 독후감 데이터를 받아옴
+  useEffect(() => {
+    try {
+      axios.get('/api/db/bookreports/' + state.isbn + '/' + state.userid)
+        .then((res) => {
+          return res.data;
+        })
+        .then((data) => {
+          onSetReportInfo(data);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  }, [state.isbn, state.userid]);
 
-    const bookIsbn = state.isbn;
+  const bookIsbn = state.isbn;
 
-    //isbn으로 책 데이터를 받아옴
-    useEffect(() => {
-        try {
-            axios.get('/api/db/books/' + bookIsbn)
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                onSetBookInfo(data);
-            });
-        } catch (err) {
-            console.log(err);
-        }
-    }, [bookIsbn]);
+  //isbn으로 책 데이터를 받아옴
+  useEffect(() => {
+    try {
+      axios.get('/api/db/books/' + bookIsbn)
+        .then((res) => {
+          return res.data;
+        })
+        .then((data) => {
+          onSetBookInfo(data);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  }, [bookIsbn]);
 
-    const dateFormat = ReportInfo.date;
+  const dateFormat = ReportInfo.date;
 
     return(
         <Wrapper>

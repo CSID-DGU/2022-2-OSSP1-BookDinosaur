@@ -20,32 +20,32 @@ const SetRoute = () => {
 
   const path = window.location.pathname;
 
-  if (!(path === '/' || path === '/SignUp')){
+  if (!(path === '/' || path === '/SignUp')) {
     if (!cookies?.user?.userId) {
-      window.location.href = '/'; 
+      window.location.href = '/';
     }
   }
-  
+
   return (
-      <Routes>
-        <Route exact={true} path="/" element={<SignIn/>} />
-        <Route exact path = "/SignUp" element={<SignUp />} />
-        <Route exact={true} path="/Main" element={<Main/>} />
-        <Route exact path="/EditPage" element={<EditPage />} />
-        <Route exact path="/BookSearchPage" element={<BookSearchPage />} />
-        <Route exact path="/ViewReportPage" element={<ViewReportPage />} />
-        <Route exact path="/MyBookPage" element={<MyBookPage />} />
-        <Route exact path="/GatherReportPage" element={<GatherReportPage />} />
-        <Route exact path="/AllReport" element={<AllReport />} />
-        <Route exact path="/RecommendPage" element={<RecommendPage />} />
-        <Route
-          path = "/*"
-          element={ <div>
-            <h2>이 페이지는 존재하지 않습니다:</h2>
-            { <p>{useLocation().pathname}</p> }
-          </div>}
-        />
-      </Routes>
+    <Routes>
+      <Route exact={true} path="/" element={<SignIn />} />
+      <Route exact path="/SignUp" element={<SignUp />} />
+      <Route exact={true} path="/Main" element={<Main />} />
+      <Route exact path="/EditPage" element={<EditPage />} />
+      <Route exact path="/BookSearchPage" element={<BookSearchPage />} />
+      <Route exact path="/ViewReportPage" element={<ViewReportPage />} />
+      <Route exact path="/MyBookPage" element={<MyBookPage />} />
+      <Route exact path="/GatherReportPage" element={<GatherReportPage />} />
+      <Route exact path="/AllReport" element={<AllReport />} />
+      <Route exact path="/RecommendPage" element={<RecommendPage />} />
+      <Route
+        path="/*"
+        element={<div>
+          <h2>이 페이지는 존재하지 않습니다:</h2>
+          {<p>{useLocation().pathname}</p>}
+        </div>}
+      />
+    </Routes>
   );
 };
 
