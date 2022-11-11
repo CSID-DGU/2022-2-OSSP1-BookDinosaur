@@ -17,7 +17,7 @@ const CosineRecommend = (props) => {
     }
   }, []);
 
-  var rankDisplay = 1;
+  let rankDisplay = 1;
 
   return (
     <div className="Recommend-area" >

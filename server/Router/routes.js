@@ -25,7 +25,7 @@ router.post('/api/db/users/login', async (req, res) => {
     if (data[0].length != 0) {
       const userData = data[0][0];
       // password 체크
-      var compare = await bcrypt.compare(password, userData.password);
+      const compare = await bcrypt.compare(password, userData.password);
       if (compare) {
         req.session.userId = userData.userid;
         req.session.nickname = userData.nickname;
@@ -244,26 +244,26 @@ router.get('/api/session', async (req, res) => {
 // get recommend data
 router.get('/api/recommend/svd', async (req, res) => {
   // result 변수에 최종 데이터 담아 넘겨주면 될 듯
-  var result;
+  let result;
 
   try {
     // 유저 배열 useridList, 책의 isbn 배열 isbnList
-    var useridList = await pool.query('SELECT userid FROM BOOKWEB.UserTB WHERE NOT userid = ?', [req.session.userId]);
-    var isbnList = await pool.query('SELECT isbn FROM BOOKWEB.BookTB ORDER BY isbn ASC');
+    const useridList = await pool.query('SELECT userid FROM BOOKWEB.UserTB WHERE NOT userid = ?', [req.session.userId]);
+    const isbnList = await pool.query('SELECT isbn FROM BOOKWEB.BookTB ORDER BY isbn ASC');
     const ulen = useridList[0].length;
     const ilen = isbnList[0].length;
 
     //dataMat 배열 만들기 (초기화된 상태로)
-    var dataMat = new Array(ulen);
+    let dataMat = new Array(ulen);
 
-    for (var i = 0; i < ulen; i++) {
+    for (let i = 0; i < ulen; i++) {
       dataMat[i] = new Array(ilen);
     }
 
     //dataMat 배열 채우기
-    for (var i = 0; i < ulen; i++) {
-      for (var j = 0; j < ilen; j++) {
-        var ratingData = await pool.query('SELECT rating FROM BOOKWEB.BookReportTB WHERE userid = ? AND isbn = ?', [useridList[0][i].userid, isbnList[0][j].isbn]);
+    for (let i = 0; i < ulen; i++) {
+      for (let j = 0; j < ilen; j++) {
+        const ratingData = await pool.query('SELECT rating FROM BOOKWEB.BookReportTB WHERE userid = ? AND isbn = ?', [useridList[0][i].userid, isbnList[0][j].isbn]);
         if (ratingData[0].length == 0) {
           dataMat[i][j] = 0;
         }
@@ -274,7 +274,7 @@ router.get('/api/recommend/svd', async (req, res) => {
     }
 
     // 데이터 없으면 파이썬 실행 전에 처리
-    var reportNum = await pool.query('SELECT COUNT(rating) as cnt FROM BOOKWEB.BookReportTB WHERE userid=?', [req.session.userId]);
+    const reportNum = await pool.query('SELECT COUNT(rating) as cnt FROM BOOKWEB.BookReportTB WHERE userid=?', [req.session.userId]);
     if (reportNum[0][0].cnt < 2) {
       result = new Object();
       result.data = [];
@@ -282,9 +282,9 @@ router.get('/api/recommend/svd', async (req, res) => {
     }
 
     // 현재 세션의 유저 배열 만들기
-    var sessionUserRating = [];
-    for (var i = 0; i < ilen; i++) {
-      var ratingData = await pool.query('SELECT rating FROM BOOKWEB.BookReportTB WHERE userid=? AND isbn = ?', [req.session.userId, isbnList[0][i].isbn]);
+    let sessionUserRating = [];
+    for (let i = 0; i < ilen; i++) {
+      const ratingData = await pool.query('SELECT rating FROM BOOKWEB.BookReportTB WHERE userid=? AND isbn = ?', [req.session.userId, isbnList[0][i].isbn]);
       if (ratingData[0].length == 0) {
         sessionUserRating[i] = 0;
       }
@@ -300,16 +300,16 @@ router.get('/api/recommend/svd', async (req, res) => {
     process.stdout.on('data', async function (data) {
       // 받아온 데이터는 추천 순위 인덱스 정보이므로 해당 인덱스에 해당하는 isbn을 찾아 실제 도서 정보를 넘겨줘야 함
       const recommendIndex = JSON.parse(data);
-      var recommendIsbn = [];
+      let recommendIsbn = [];
       for (const element of recommendIndex) {
         recommendIsbn.push(isbnList[0][element]);
       }
 
       // isbn 배열로 도서를 찾아서 도서 정보 리턴해줌
       // 모든 책을 다 읽은 경우 내용이 배열에 내용이 없을 수 있음, 프론트쪽에서 처리하여 '더이상 추천해줄 도서가 없습니다.'와 같이 메시지를 출력해주는 것이 좋을 듯
-      var recommendBookArray = []; // 추천 도서 정보 배열
-      for (var i = 0; i < recommendIsbn.length; i++) {
-        var data = await pool.query('SELECT * FROM BOOKWEB.BookTB WHERE isbn = ?', [recommendIsbn[i].isbn]);
+      let recommendBookArray = []; // 추천 도서 정보 배열
+      for (let i = 0; i < recommendIsbn.length; i++) {
+        const data = await pool.query('SELECT * FROM BOOKWEB.BookTB WHERE isbn = ?', [recommendIsbn[i].isbn]);
         recommendBookArray[i] = data[0][0];
       }
 
@@ -342,56 +342,56 @@ router.get('/api/recommend/cos', async (req, res) => {
   try {
     //나를 제외하고 독후감을 하나 이상 쓴 모든 유저의 userid, preference 가져오기
     try {
-      var allUser = await pool.query('SELECT DISTINCT U.userid, U.preference FROM BOOKWEB.UserTB AS U, BOOKWEB.BookReportTB AS R WHERE U.userid = R.userid AND NOT U.userid = ?', [req.session.userId]);
-      var userData = allUser[0];
+      const allUser = await pool.query('SELECT DISTINCT U.userid, U.preference FROM BOOKWEB.UserTB AS U, BOOKWEB.BookReportTB AS R WHERE U.userid = R.userid AND NOT U.userid = ?', [req.session.userId]);
+      const userData = allUser[0];
     } catch {
       return res.json({ issuccess: false, message: "user data get failed" });
     }
-    var userList = [];
-    var preferMat = [];
+    let userList = [];
+    let preferMat = [];
 
     for (const element of userData) {
       userList.push(element.userid);
       preferMat.push(element.preference.split(","));
     }
 
-    var myData = await pool.query('SELECT preference FROM BOOKWEB.UserTB WHERE userid = ?', [req.session.userId]);
-    var myPrefer = myData[0][0].preference.split(",");
+    const myData = await pool.query('SELECT preference FROM BOOKWEB.UserTB WHERE userid = ?', [req.session.userId]);
+    const myPrefer = myData[0][0].preference.split(",");
 
-    var result;
+    let result;
 
     const process = spawn('python', ['python/cos.py', JSON.stringify(preferMat), JSON.stringify(myPrefer)]);
     process.stdout.setEncoding('utf8');
     // stdout에 대한 콜백
     process.stdout.on('data', async function (data) {
       const recommendIndex = JSON.parse(data);
-      var similarUser = [];
+      let similarUser = [];
       for (const element of recommendIndex) {
         similarUser.push(userList[element]);
       }
 
       //내가 독후감을 쓴 책의 isbn 목록 가져오기
-      var data = await pool.query('SELECT isbn FROM BOOKWEB.BookReportTB WHERE userid = ?', [req.session.userId]);
-      var myBook = data[0];
+      const data = await pool.query('SELECT isbn FROM BOOKWEB.BookReportTB WHERE userid = ?', [req.session.userId]);
+      const myBook = data[0];
 
-      var bookList = [];
-      for (var i = 0; i < myBook.length; i++) {
+      let bookList = [];
+      for (let i = 0; i < myBook.length; i++) {
         bookList.push([myBook[i].isbn, 0]);
       }
 
       // 상위 3명 유저(similarUser[0]~[2])가 읽은 책 목록을 bookList에 업데이트, rating 추가
       // 상위 n명 유저에 대한 상수를 NUMOFUSER로 선언
       const NUMOFUSER = 3;
-      var similar = [];
-      for (var i = 0; i < NUMOFUSER; i++) {
-        var data = await pool.query('SELECT isbn, rating FROM BOOKWEB.BookReportTB WHERE userid = ?', [similarUser[i]]);
+      let similar = [];
+      for (let i = 0; i < NUMOFUSER; i++) {
+        const data = await pool.query('SELECT isbn, rating FROM BOOKWEB.BookReportTB WHERE userid = ?', [similarUser[i]]);
         similar.push(data[0]);
       }
 
       function RatingList(arr) { //[["isbn", raing1, rating2, ....], ...] 이렇게 추가함
         for (const element of arr) {
-          var inBookList = 0;
-          for (var j = 0; j < bookList.length; j++) {
+          let inBookList = 0;
+          for (let j = 0; j < bookList.length; j++) {
             if (bookList[j][0] == element.isbn) { //이미 동일한 isbn이 리스트에 있을 시
               bookList[j].push(element.rating); //뒤에 rating 추가
               inBookList = 1;
@@ -403,13 +403,13 @@ router.get('/api/recommend/cos', async (req, res) => {
         }
       }
 
-      for (var i = 0; i < NUMOFUSER; i++) {
+      for (let i = 0; i < NUMOFUSER; i++) {
         RatingList(similar[i]);
       }
 
       //bookList에서 내가 읽은 것 제외
-      for (var i = 0; i < myBook.length; i++) {
-        for (var j = 0; j < bookList.length; j++) {
+      for (let i = 0; i < myBook.length; i++) {
+        for (let j = 0; j < bookList.length; j++) {
           if (bookList.length == 0) {
             break;
           }
@@ -423,13 +423,13 @@ router.get('/api/recommend/cos', async (req, res) => {
       if (bookList.length === 0) {
         return res.json(bookList);
       }
-      var averageRating = [];
-      for (var i = 0; i < bookList.length; i++) {
-        var sum = 0;
-        for (var j = 1; j < bookList[i].length; j++) {
+      let averageRating = [];
+      for (let i = 0; i < bookList.length; i++) {
+        let sum = 0;
+        for (let j = 1; j < bookList[i].length; j++) {
           sum += bookList[i][j];
         }
-        var average = sum / NUMOFUSER;
+        const average = sum / NUMOFUSER;
         averageRating.push([bookList[i][0], average]);
       }
 
@@ -441,9 +441,9 @@ router.get('/api/recommend/cos', async (req, res) => {
       //최고 평점인 책 최대 3개의 isbn 가져오기
       //평점 평균 상위 n권에 대한 상수를 NUMOFBOOK으로 선언
       const NUMOFBOOK = 3
-      var recBookIsbn = [];
-      var count = 0;
-      for (var i = 0; i < averageRating.length; i++) {
+      let recBookIsbn = [];
+      let count = 0;
+      for (let i = 0; i < averageRating.length; i++) {
         if (count == NUMOFBOOK) {
           break;
         }
@@ -452,9 +452,9 @@ router.get('/api/recommend/cos', async (req, res) => {
       }
 
       // isbn 배열로 도서를 찾아서 도서 정보 리턴해줌
-      var recBookArray = []; // 추천 도서의 정보 배열
-      for (var i = 0; i < recBookIsbn.length; i++) {
-        var data = await pool.query('SELECT * FROM BOOKWEB.BookTB WHERE isbn = ?', [recBookIsbn[i]]);
+      let recBookArray = []; // 추천 도서의 정보 배열
+      for (let i = 0; i < recBookIsbn.length; i++) {
+        const data = await pool.query('SELECT * FROM BOOKWEB.BookTB WHERE isbn = ?', [recBookIsbn[i]]);
         recBookArray[i] = data[0][0];
       }
       result = new Object();
