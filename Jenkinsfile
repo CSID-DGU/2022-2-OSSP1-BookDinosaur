@@ -9,7 +9,7 @@ node {
     sh "cd client && npm install"
   }
   stage('Test and coverage') {
-    sh "npm test"
+    sh "CI=true npm test"
   }
   stage('SonarQube scan') {
     def scannerHome = tool 'SonarScanner';

@@ -4,7 +4,7 @@
     "server": "cd server && nodemon server.js",
     "front": "cd client && npm start",
     "dev": "concurrently \"npm run server\" \"npm run front\"",
-    "test": "cd client && npm test -- --coverage"
+    "test": "cd client && npm test"
   },
   "dependencies": {
     "axios": "^0.27.2",
