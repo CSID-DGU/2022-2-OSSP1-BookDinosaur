@@ -104,7 +104,7 @@ const SignUp = () => {
         else if (age < 60) { return 4 }
         else { return 5 }
       }
-      var genreText = "";
+      let genreText = "";
       function convertGenreCheck(genre) {
         if (genre.checkedA) {
           genreText += "1";
