@@ -4,7 +4,14 @@ node {
   stage('SCM') {
     checkout scm
   }
-  stage('SonarQube Analysis') {
+  stage('Install dependencies') {
+    sh "npm install"
+    sh "cd client && npm install"
+  }
+  stage('Test and coverage') {
+    sh "npm test"
+  }
+  stage('SonarQube scan') {
     def scannerHome = tool 'SonarScanner';
     withSonarQubeEnv() {
       sh "${scannerHome}/bin/sonar-scanner"
