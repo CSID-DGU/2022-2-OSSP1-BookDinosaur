@@ -92,9 +92,9 @@ const ViewReportPage = () => {
   const bookIsbn = state.isbn;
 
   //isbn으로 책 데이터를 받아옴
-  useEffect(() => {
+  useEffect(async () => {
     try {
-      axios.get('/api/db/books/' + bookIsbn)
+      await axios.get('/api/db/books/' + bookIsbn)
         .then((res) => {
           return res.data;
         })
