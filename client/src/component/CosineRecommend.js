@@ -6,9 +6,9 @@ import { Link } from 'react-router-dom';
 const CosineRecommend = (props) => {
   const [RecommendList, setRecommendList] = useState([]);
 
-  useEffect(() => {
+  useEffect(async () => {
     try {
-      axios.get('/api/recommend/cos')
+      await axios.get('/api/recommend/cos')
         .then((res) => {
           setRecommendList(res.data.data || []);
         })
