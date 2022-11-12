@@ -8,9 +8,9 @@ const TopViewReport = (props) => {
   const [reportList, setReportList] = useState([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
+  useEffect(async () => {
     try {
-      axios.get("/api/db/bookreports/view").then((res) => {
+      await axios.get("/api/db/bookreports/view").then((res) => {
         setReportList(res.data.data || []);
       });
     } catch (err) {

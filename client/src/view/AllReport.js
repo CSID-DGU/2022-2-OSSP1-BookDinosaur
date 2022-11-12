@@ -23,9 +23,9 @@ const AllReport = () => {
   const [reportList, setReportList] = useState([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
+  useEffect(async () => {
     try {
-      axios.get("/api/db/bookreports/new").then((res) => {
+      await axios.get("/api/db/bookreports/new").then((res) => {
         setReportList(res.data.data || []);
       });
     } catch (err) {

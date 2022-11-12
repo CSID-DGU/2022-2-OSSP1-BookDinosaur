@@ -6,9 +6,9 @@ import { Link } from 'react-router-dom';
 const SvdRecommend = (props) => {
   const [RecommendList, setRecommendList] = useState([]);
 
-  useEffect(() => {
+  useEffect(async () => {
     try {
-      axios.get('/api/recommend/svd')
+      await axios.get('/api/recommend/svd')
         .then((res) => {
           setRecommendList(res.data.data || []);
         })

@@ -75,9 +75,9 @@ const ViewReportPage = () => {
     };
 
   //isbn, userid로 독후감 데이터를 받아옴
-  useEffect(() => {
+  useEffect(async () => {
     try {
-      axios.get('/api/db/bookreports/' + state.isbn + '/' + state.userid)
+      await axios.get('/api/db/bookreports/' + state.isbn + '/' + state.userid)
         .then((res) => {
           return res.data;
         })
