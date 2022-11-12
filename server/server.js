@@ -44,8 +44,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Router 모듈 불러오기
-const routes = require("./Router/routes.js");
-const api = require("./Router/api.js");
+const kakao = require("./router/kakao.js");
+const auth = require("./router/auth.js");
+const books = require("./router/books.js");
+const bookReports = require("./router/book-reports.js");
+const recommendedBooks = require("./router/recommended-books.js");
 
 // 기본 포트를 app 객체에 설정
 const PORT = process.env.PORT || 5000;
@@ -55,9 +58,12 @@ app.listen(PORT, () => console.log(`server is running ${PORT}`));
 app.use(express.static(path.join(__dirname, '../client/build')));
 
 // 라우트 설정
-app.use(api);
-app.use(routes);
+app.use(kakao);
+app.use(auth);
+app.use(books);
+app.use(bookReports);
+app.use(recommendedBooks);
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+  res.sendFile(pathFjoin(__dirname, '../client/build/index.html'));
 });
