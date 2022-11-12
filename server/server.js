@@ -6,6 +6,7 @@ const express = require('express');
 
 // express 객체 생성
 const app = express();
+app.disable("x-powered-by");
 
 // path 모듈 불러오기
 const path = require('path');
