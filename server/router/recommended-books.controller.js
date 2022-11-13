@@ -1,24 +1,17 @@
-const express = require('express');
-const router = express.Router();
-const controller = require('./recommended-books.controller');
+const pool = require('../pool');
+const spawn = require('child_process').spawn;
 
-<<<<<<< HEAD
 // get recommend data
-router.get("/api/recommend/svd", async (req, res) => {
+exports.getRecommendedBooksByRatings = async (req, res) => {
   // result 변수에 최종 데이터 담아 넘겨주면 될 듯
   let result;
 
   try {
     // 유저 배열 useridList, 책의 isbn 배열 isbnList
-    const useridList = await pool.query(
-      "SELECT userid FROM BOOKWEB.UserTB WHERE NOT userid = ?",
-      [req.session.userId]
-    );
-    const isbnList = await pool.query(
-      "SELECT isbn FROM BOOKWEB.BookTB ORDER BY isbn ASC"
-    );
-    const ulen = useridList.length;
-    const ilen = isbnList.length;
+    const useridList = await pool.query('SELECT userid FROM BOOKWEB.UserTB WHERE NOT userid = ?', [req.session.userId]);
+    const isbnList = await pool.query('SELECT isbn FROM BOOKWEB.BookTB ORDER BY isbn ASC');
+    const ulen = useridList[0].length;
+    const ilen = isbnList[0].length;
 
     //dataMat 배열 만들기 (초기화된 상태로)
     let dataMat = new Array(ulen);
@@ -30,104 +23,87 @@ router.get("/api/recommend/svd", async (req, res) => {
     //dataMat 배열 채우기
     for (let i = 0; i < ulen; i++) {
       for (let j = 0; j < ilen; j++) {
-        const ratingData = await pool.query(
-          "SELECT rating FROM BOOKWEB.BookReportTB WHERE userid = ? AND isbn = ?",
-          [useridList[0][i].userid, isbnList[0][j].isbn]
-        );
-        if (ratingData.length == 0) {
+        const ratingData = await pool.query('SELECT rating FROM BOOKWEB.BookReportTB WHERE userid = ? AND isbn = ?', [useridList[0][i].userid, isbnList[0][j].isbn]);
+        if (ratingData[0].length == 0) {
           dataMat[i][j] = 0;
-        } else {
-          dataMat[i][j] = ratingData[0].rating;
+        }
+        else {
+          dataMat[i][j] = ratingData[0][0].rating;
         }
       }
     }
 
     // 데이터 없으면 파이썬 실행 전에 처리
-    const reportNum = await pool.query(
-      "SELECT COUNT(rating) as cnt FROM BOOKWEB.BookReportTB WHERE userid=?",
-      [req.session.userId]
-    );
-    if (reportNum[0].cnt < 2) {
+    const reportNum = await pool.query('SELECT COUNT(rating) as cnt FROM BOOKWEB.BookReportTB WHERE userid=?', [req.session.userId]);
+    if (reportNum[0][0].cnt < 2) {
       result = new Object();
       result.data = [];
-      return res.json(
-        Object.assign(result, { issuccess: false, message: "no recommand" })
-      );
+      return res.json(Object.assign(result, { issuccess: false, message: "no recommand" }));
     }
 
     // 현재 세션의 유저 배열 만들기
     let sessionUserRating = [];
     for (let i = 0; i < ilen; i++) {
-      const ratingData = await pool.query(
-        "SELECT rating FROM BOOKWEB.BookReportTB WHERE userid=? AND isbn = ?",
-        [req.session.userId, isbnList[0][i].isbn]
-      );
+      const ratingData = await pool.query('SELECT rating FROM BOOKWEB.BookReportTB WHERE userid=? AND isbn = ?', [req.session.userId, isbnList[0][i].isbn]);
       if (ratingData[0].length == 0) {
         sessionUserRating[i] = 0;
-      } else {
-        sessionUserRating[i] = ratingData[0].rating;
+      }
+      else {
+        sessionUserRating[i] = ratingData[0][0].rating;
       }
     }
 
     dataMat.push(sessionUserRating); // 현재 추천해줄 유저의 평점 정보 추가
 
-    const process = spawn("python", ["python/svd.py", JSON.stringify(dataMat)]);
+    const process = spawn('python', ['python/svd.py', JSON.stringify(dataMat)]);
     // stdout에 대한 콜백
-    process.stdout.on("data", async function (data) {
+    process.stdout.on('data', async function (data) {
       // 받아온 데이터는 추천 순위 인덱스 정보이므로 해당 인덱스에 해당하는 isbn을 찾아 실제 도서 정보를 넘겨줘야 함
       const recommendIndex = JSON.parse(data);
       let recommendIsbn = [];
       for (const element of recommendIndex) {
-        recommendIsbn.push(isbnList[element]);
+        recommendIsbn.push(isbnList[0][element]);
       }
 
       // isbn 배열로 도서를 찾아서 도서 정보 리턴해줌
       // 모든 책을 다 읽은 경우 내용이 배열에 내용이 없을 수 있음, 프론트쪽에서 처리하여 '더이상 추천해줄 도서가 없습니다.'와 같이 메시지를 출력해주는 것이 좋을 듯
       let recommendBookArray = []; // 추천 도서 정보 배열
       for (let i = 0; i < recommendIsbn.length; i++) {
-        const data = await pool.query(
-          "SELECT * FROM BOOKWEB.BookTB WHERE isbn = ?",
-          [recommendIsbn[i].isbn]
-        );
-        recommendBookArray[i] = data[0];
+        const data = await pool.query('SELECT * FROM BOOKWEB.BookTB WHERE isbn = ?', [recommendIsbn[i].isbn]);
+        recommendBookArray[i] = data[0][0];
       }
 
       result = new Object();
       result.data = recommendBookArray;
 
-      return res.json(
-        Object.assign(result, { issuccess: true, message: "success" })
-      );
+      return res.json(Object.assign(result, { issuccess: true, message: "success" }));
       /*
-            내용 출력 테스트용
-            console.log("stdout: " + data.toString());
-            result = data.toString();
-            return res.json(result);
-            */
+      내용 출력 테스트용
+      console.log("stdout: " + data.toString());
+      result = data.toString();
+      return res.json(result);
+      */
     });
 
     // stderr에 대한 콜백
-    process.stderr.on("data", function (data) {
+    process.stderr.on('data', function (data) {
       result = data.toString();
-      return res.json(
-        Object.assign(result, { issuccess: false, message: "error" })
-      );
+      return res.json(Object.assign(result, { issuccess: false, message: "error" }));
     });
+
   } catch (err) {
     return res.status(500).json(err);
   }
-});
+};
 
 // get recommend data (cosine)
-router.get("/api/recommend/cos", async (req, res) => {
+exports.getRecommendedBooksByPreferences = async (req, res) => {
   try {
     //나를 제외하고 독후감을 하나 이상 쓴 모든 유저의 userid, preference 가져오기
+    let userData;
     try {
-      const allUser = await pool.query(
-        "SELECT DISTINCT U.userid, U.preference FROM BOOKWEB.UserTB AS U, BOOKWEB.BookReportTB AS R WHERE U.userid = R.userid AND NOT U.userid = ?",
-        [req.session.userId]
-      );
-      const userData = allUser;
+      const allUser = await pool.query('SELECT DISTINCT U.userid, U.preference FROM BOOKWEB.UserTB AS U, BOOKWEB.BookReportTB AS R WHERE U.userid = R.userid AND NOT U.userid = ?', [req.session.userId]);
+      userData = allUser[0];
     } catch {
       return res.json({ issuccess: false, message: "user data get failed" });
     }
@@ -139,22 +115,15 @@ router.get("/api/recommend/cos", async (req, res) => {
       preferMat.push(element.preference.split(","));
     }
 
-    const myData = await pool.query(
-      "SELECT preference FROM BOOKWEB.UserTB WHERE userid = ?",
-      [req.session.userId]
-    );
-    const myPrefer = myData[0].preference.split(",");
+    const myData = await pool.query('SELECT preference FROM BOOKWEB.UserTB WHERE userid = ?', [req.session.userId]);
+    const myPrefer = myData[0][0].preference.split(",");
 
     let result;
 
-    const process = spawn("python", [
-      "python/cos.py",
-      JSON.stringify(preferMat),
-      JSON.stringify(myPrefer),
-    ]);
-    process.stdout.setEncoding("utf8");
+    const process = spawn('python', ['python/cos.py', JSON.stringify(preferMat), JSON.stringify(myPrefer)]);
+    process.stdout.setEncoding('utf8');
     // stdout에 대한 콜백
-    process.stdout.on("data", async function (data) {
+    process.stdout.on('data', async function (data) {
       const recommendIndex = JSON.parse(data);
       let similarUser = [];
       for (const element of recommendIndex) {
@@ -162,10 +131,7 @@ router.get("/api/recommend/cos", async (req, res) => {
       }
 
       //내가 독후감을 쓴 책의 isbn 목록 가져오기
-      const data = await pool.query(
-        "SELECT isbn FROM BOOKWEB.BookReportTB WHERE userid = ?",
-        [req.session.userId]
-      );
+      data = await pool.query('SELECT isbn FROM BOOKWEB.BookReportTB WHERE userid = ?', [req.session.userId]);
       const myBook = data[0];
 
       let bookList = [];
@@ -178,27 +144,21 @@ router.get("/api/recommend/cos", async (req, res) => {
       const NUMOFUSER = 3;
       let similar = [];
       for (let i = 0; i < NUMOFUSER; i++) {
-        const data = await pool.query(
-          "SELECT isbn, rating FROM BOOKWEB.BookReportTB WHERE userid = ?",
-          [similarUser[i]]
-        );
+        const data = await pool.query('SELECT isbn, rating FROM BOOKWEB.BookReportTB WHERE userid = ?', [similarUser[i]]);
         similar.push(data[0]);
       }
 
-      function RatingList(arr) {
-        //[["isbn", raing1, rating2, ....], ...] 이렇게 추가함
+      function RatingList(arr) { //[["isbn", raing1, rating2, ....], ...] 이렇게 추가함
         for (const element of arr) {
           let inBookList = 0;
           for (let j = 0; j < bookList.length; j++) {
-            if (bookList[j][0] == element.isbn) {
-              //이미 동일한 isbn이 리스트에 있을 시
+            if (bookList[j][0] == element.isbn) { //이미 동일한 isbn이 리스트에 있을 시
               bookList[j].push(element.rating); //뒤에 rating 추가
               inBookList = 1;
               break;
             }
           }
-          if (inBookList == 0)
-            //동일한 isbn이 리스트에 없을 시
+          if (inBookList == 0) //동일한 isbn이 리스트에 없을 시
             bookList.push([arr[i].isbn, arr[i].rating]); //isbn과 rating을 리스트로 추가
         }
       }
@@ -240,7 +200,7 @@ router.get("/api/recommend/cos", async (req, res) => {
 
       //최고 평점인 책 최대 3개의 isbn 가져오기
       //평점 평균 상위 n권에 대한 상수를 NUMOFBOOK으로 선언
-      const NUMOFBOOK = 3;
+      const NUMOFBOOK = 3
       let recBookIsbn = [];
       let count = 0;
       for (let i = 0; i < averageRating.length; i++) {
@@ -252,35 +212,22 @@ router.get("/api/recommend/cos", async (req, res) => {
       }
 
       // isbn 배열로 도서를 찾아서 도서 정보 리턴해줌
-      recBookArray = []; // 추천 도서의 정보 배열
+      let recBookArray = []; // 추천 도서의 정보 배열
       for (let i = 0; i < recBookIsbn.length; i++) {
-        const data = await pool.query(
-          "SELECT * FROM BOOKWEB.BookTB WHERE isbn = ?",
-          [recBookIsbn[i]]
-        );
+        const data = await pool.query('SELECT * FROM BOOKWEB.BookTB WHERE isbn = ?', [recBookIsbn[i]]);
         recBookArray[i] = data[0][0];
       }
       result = new Object();
       result.data = recBookArray;
-      return res.json(
-        Object.assign(result, { issuccess: true, message: "success" })
-      );
+      return res.json(Object.assign(result, { issuccess: true, message: "success" }));
     });
 
     // stderr에 대한 콜백
-    process.stderr.on("data", function (data) {
+    process.stderr.on('data', function (data) {
       result = data.toString();
-      return res.json(
-        Object.assign(result, { issuccess: false, message: "error" })
-      );
+      return res.json(Object.assign(result, { issuccess: false, message: "error" }));
     });
   } catch (err) {
     return res.status(500).json(err);
   }
-});
-=======
-router.get('/api/recommend/svd', controller.getRecommendedBooksByRatings);
-router.get('/api/recommend/cos', controller.getRecommendedBooksByPreferences);
->>>>>>> b088b9e (Separate routing functions and business logic)
-
-module.exports = router;
+};
