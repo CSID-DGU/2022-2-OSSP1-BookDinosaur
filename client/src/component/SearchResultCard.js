@@ -25,23 +25,23 @@ const useStyles = makeStyles({
   }
 });
 
-export default function SearchResultCard({thumbnail, title, authors, publisher, datetime, contents, isbn}) {
+export default function SearchResultCard({ thumbnail, title, authors, publisher, datetime, contents, isbn }) {
   const classes = useStyles();
 
   return (
     <Card className={classes.root}>
       <CardActionArea>
-        <CardMedia 
+        <CardMedia
           component="img"
           alt="Contemplative Reptile"
-          height= "100%"
-          width= "100%"
+          height="100%"
+          width="100%"
           image={thumbnail}
           title="book"
         />
 
       </CardActionArea>
-      
+
       <div className={classes.content}>
         <CardContent>
           <Typography gutterBottom variant="subtitle1" component="h2">
@@ -60,18 +60,18 @@ export default function SearchResultCard({thumbnail, title, authors, publisher, 
             {contents}
           </Typography>
         </CardContent>
-      <CardActions>
-        <Link to = "/EditPage" state = {{isbn, title, authors, publisher, thumbnail}}>
-          <Button size="small" color="primary">
-            독후감 작성
-          </Button>
-        </Link>
-        <Link to = "/GatherReportPage" state = {{isbn: isbn, thumbnail, title, authors, publisher}}>
-          <Button size="small" color="primary">
-            독후감 모아보기
-          </Button>
-        </Link>
-      </CardActions>
+        <CardActions>
+          <Link to="/EditPage" state={{ isbn, title, authors, publisher, thumbnail }}>
+            <Button size="small" color="primary">
+              독후감 작성
+            </Button>
+          </Link>
+          <Link to="/GatherReportPage" state={{ isbn: isbn, thumbnail, title, authors, publisher }}>
+            <Button size="small" color="primary">
+              독후감 모아보기
+            </Button>
+          </Link>
+        </CardActions>
       </div>
     </Card>
   );
