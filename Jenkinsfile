@@ -32,12 +32,12 @@ pipeline {
       when {
         branch 'development'
       }
+      environment {
+          scannerHome = tool 'SonarScanner';
+      }
       steps {
-        script {
-          def scannerHome = tool 'SonarScanner';
-          withSonarQubeEnv('SonarQube') {
-            sh '${scannerHome}/bin/sonar-scanner'
-          }
+        withSonarQubeEnv('SonarQube') {
+          sh '${scannerHome}/bin/sonar-scanner'
         }
       }
     }
