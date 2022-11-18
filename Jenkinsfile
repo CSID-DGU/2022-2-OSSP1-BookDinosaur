@@ -13,24 +13,32 @@ pipeline {
   }
   stages {
     stage('SCM') {
-      checkout scm
+      steps {
+        checkout scm
+      }
     }
     stage('Build') {
-      sh 'npm install'
-      sh 'cd client && npm install'
+      steps {
+        sh 'npm install'
+        sh 'cd client && npm install'
+      }
     }
     stage('Test') {
-      sh 'npm test'
+      steps {
+        sh 'npm test'
+      }
     }
     stage('SonarQube scan') {
       when {
         branch 'development'
       }
       steps {
-      def scannerHome = tool 'SonarScanner';
-      withSonarQubeEnv() {
-        sh '${scannerHome}/bin/sonar-scanner'
-      }
+        script {
+          def scannerHome = tool 'SonarScanner';
+          withSonarQubeEnv('SonarQube') {
+            sh '${scannerHome}/bin/sonar-scanner'
+          }
+        }
       }
     }
     stage('Deliver for development') {
