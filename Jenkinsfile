@@ -31,7 +31,7 @@ pipeline {
     stage('SonarQube scan') {
       when {
         beforeAgent true
-        branch pattern: "^(?!.*jenkins-pipeline).*$", comparator: "REGEXP"
+        branch pattern: "^.*jenkins-pipeline", comparator: "REGEXP"
       }
       environment {
           SCANNER_HOME = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation';
@@ -45,7 +45,7 @@ pipeline {
     stage('Deliver for development') {
       when {
         beforeAgent true
-        branch pattern: "^(?!.*jenkins-pipeline).*$", comparator: "REGEXP"
+        branch pattern: "^.*jenkins-pipeline", comparator: "REGEXP"
       }
       steps {
         sh 'npm run dev'
