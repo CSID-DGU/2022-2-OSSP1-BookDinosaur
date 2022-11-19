@@ -30,13 +30,15 @@ pipeline {
     }
     stage('SonarQube scan') {
       when {
-        expression { params.BRANCH_NAME == 'jenkins-pipeline' }
+        beforeAgent true
+        branch pattern: "*/jenkins-pipeline", comparator: "REGEXP"
       }
-      
+      environment {
+          SCANNER_HOME = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation';
+      }
       steps {
-        script {
-          def SCANNER_HOME = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation';
-          sh '${SCANNER_HOME}/bin/sonar-scanner -e -Dsonar.host.url=116.40.234.19:3456'
+        withSonarQubeEnv(installationName: 'SonarQube') {
+          sh '${SCANNER_HOME}/bin/sonar-scanner'
         }
       }
     }
