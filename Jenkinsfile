@@ -33,11 +33,11 @@ pipeline {
         branch 'development'
       }
       environment {
-          scannerHome = tool 'SonarScanner';
+          SCANNER_HOME = tool 'SonarScanner';
       }
       steps {
-        withSonarQubeEnv('SonarQube') {
-          sh '${scannerHome}/bin/sonar-scanner'
+        withSonarQubeEnv(installationName: 'SonarQube') {
+          sh '${SCANNER_HOME}/bin/sonar-scanner'
         }
       }
     }
@@ -72,5 +72,4 @@ pipeline {
       }
     }
   }
-  
 }
