@@ -1,5 +1,10 @@
 pipeline {
-  agent any
+  agent {
+    docker {
+      image 'node:lts-alpine'
+      args '-p 3000:3000 -p 5000:5000'
+    }
+  }
   environment {
     CI = 'true'
     NODEJS_HOME = '${tool "Node"}'
@@ -16,29 +21,22 @@ pipeline {
       }
     }
     stage('Build') {
-      agent {
-        docker {
-          image 'node:lts-alpine'
-          args '-p 3000:3000 -p 5000:5000'
-        }
-      }
       steps {
         sh 'npm install'
         sh 'cd client && npm install'
       }
     }
     stage('Test') {
-      agent {
-        docker {
-          image 'node:lts-alpine'
-          args '-p 3000:3000 -p 5000:5000'
-        }
-      }
       steps {
         sh 'npm test'
       }
     }
     stage('SonarQube scan') {
+      agent {
+        docker {
+          image 'sonarsource/sonar-scanner-cli'
+        }
+      }
       steps {
         script {
           def SCANNER_HOME = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation';
@@ -49,12 +47,6 @@ pipeline {
       }
     }
     stage('Deliver for development') {
-      agent {
-        docker {
-          image 'node:lts-alpine'
-          args '-p 3000:3000 -p 5000:5000'
-        }
-      }
       steps {
         sh 'npm run dev'
       }
