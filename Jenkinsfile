@@ -30,7 +30,7 @@ pipeline {
     }
     stage('SonarQube scan') {
       when {
-        branch 'refs/remotes/origin/jenkins-pipeline'
+        branch 'origin/jenkins-pipeline'
       }
       environment {
           SCANNER_HOME = tool 'SonarScanner';
@@ -43,7 +43,7 @@ pipeline {
     }
     stage('Deliver for development') {
       when {
-        branch 'refs/remotes/origin/jenkins-pipeline'
+        branch 'origin/jenkins-pipeline'
       }
       steps {
         sh 'npm run dev'
