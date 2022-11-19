@@ -29,10 +29,8 @@ pipeline {
       }
     }
     stage('SonarQube scan') {
-      environment {
-          SCANNER_HOME = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation';
-      }
-      steps {
+      node {
+        def SCANNER_HOME = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation';
         withSonarQubeEnv(installationName: 'SonarQube') {
           sh '${SCANNER_HOME}/bin/sonar-scanner'
         }
@@ -56,6 +54,6 @@ pipeline {
             webhookURL: 'env.WEBHOOK_URL'
         }
       }
-    }
+    }`
   }
 }
