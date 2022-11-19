@@ -30,13 +30,14 @@ pipeline {
     }
     stage('SonarQube scan') {
       agent any
-      environment {
-          SCANNER_HOME = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation';
-      }
       steps {
-        withSonarQubeEnv(installationName: 'SonarQube') {
-          sh '${SCANNER_HOME}/bin/sonar-scanner'
+        script {
+          def SCANNER_HOME = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation';
+          withSonarQubeEnv(installationName: 'SonarQube') {
+            sh '${SCANNER_HOME}/bin/sonar-scanner'
+          }
         }
+        
       }
     }
     stage('Deliver for development') {
