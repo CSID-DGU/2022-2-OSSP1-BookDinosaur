@@ -30,9 +30,7 @@ pipeline {
     }
     stage('SonarQube scan') {
       agent {
-        node {
-          label 'Built-In Node'
-        }
+        any
       }
       environment {
           SCANNER_HOME = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation';
