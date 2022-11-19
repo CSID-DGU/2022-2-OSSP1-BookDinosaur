@@ -31,7 +31,7 @@ pipeline {
     stage('SonarQube scan') {
       agent {
         node {
-          label 'SonarQube scan'
+          label 'Built-In Node'
         }
       }
       environment {
