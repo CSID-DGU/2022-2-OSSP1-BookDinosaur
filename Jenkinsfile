@@ -33,7 +33,7 @@ pipeline {
         expression { params.BRANCH_NAME == 'jenkins-pipeline' }
       }
       environment {
-          SCANNER_HOME = tool 'SonarScanner';
+          SCANNER_HOME = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation';
       }
       steps {
         withSonarQubeEnv(installationName: 'SonarQube') {
