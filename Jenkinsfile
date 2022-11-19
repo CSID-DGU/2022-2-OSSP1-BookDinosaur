@@ -6,6 +6,9 @@ pipeline {
     PATH='${env.NODEJS_HOME}/bin:${env.PATH}'
     WEBHOOK_URL = credentials('BOOKDINOSAUR_DISCORD_WEBHOOK_URL')
   }
+  options {
+    timeout(time: 3, unit: 'MINUTES') 
+  }
   stages {
     stage('SCM') {
       steps {
