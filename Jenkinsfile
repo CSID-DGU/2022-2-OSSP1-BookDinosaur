@@ -29,10 +29,6 @@ pipeline {
       }
     }
     stage('SonarQube scan') {
-      when {
-        beforeAgent true
-        branch pattern: "^.*jenkins-pipeline", comparator: "REGEXP"
-      }
       environment {
           SCANNER_HOME = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation';
       }
@@ -43,10 +39,6 @@ pipeline {
       }
     }
     stage('Deliver for development') {
-      when {
-        beforeAgent true
-        branch pattern: "^.*jenkins-pipeline", comparator: "REGEXP"
-      }
       steps {
         sh 'npm run dev'
       }
@@ -63,14 +55,6 @@ pipeline {
             result: currentBuild.currentResult,
             webhookURL: 'env.WEBHOOK_URL'
         }
-      }
-    }
-    stage('Deploy for production') {
-      when {
-        branch 'main'
-      }
-      steps {
-        sh 'npm start'
       }
     }
   }
