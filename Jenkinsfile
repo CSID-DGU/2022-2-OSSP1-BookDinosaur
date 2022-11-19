@@ -54,6 +54,6 @@ pipeline {
             webhookURL: 'env.WEBHOOK_URL'
         }
       }
-    }`
+    }
   }
 }
