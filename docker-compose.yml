@@ -1,16 +1,5 @@
 version: "3"
 services:
-  nginx:
-    depends_on:
-      - api
-      - client
-    restart: always
-    build:
-      dockerfile: Dockerfile
-      context: ./nginx
-    image: homubee/bookrec-nginx
-    ports:
-      - "80:80"
   api:
     build:
       dockerfile: Dockerfile
@@ -28,3 +17,15 @@ services:
     volumes:
       - /usr/src/app/client/node_modules
       - ./client:/usr/src/app/client
+  mariadb:
+    image: mariadb:10
+    ports:
+      - 3308:3306
+    volumes:
+      - ./mariadb/conf.d:/etc/mysql/conf.d
+      - ./mariadb/data:/var/lib/mysql
+      - ./mariadb/initdb.d:/docker-entrypoint-initdb.d
+    env_file: .env
+    environment:
+      TZ: Asia/Seoul
+    restart: always
