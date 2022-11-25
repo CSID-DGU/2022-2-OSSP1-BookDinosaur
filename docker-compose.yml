@@ -4,7 +4,6 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./
-    image: homubee/bookrec-api
     volumes:
       - /usr/src/app/node_modules
       - ./:/usr/src/app
