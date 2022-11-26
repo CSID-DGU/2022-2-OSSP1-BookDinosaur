@@ -40,14 +40,14 @@ const ViewReportPage = () => {
         isbn: '',
         publisher: '',
         thumbnail: '',
-        title: ''
+        bookTitle: ''
     });
 
     const [ReportInfo, setReportInfo] = useState({
         contents: '',
         isbn: '',
         rating: '',
-        ReportTitle: '',
+        title: '',
         views: '',
         date: '',
         userid: ''
@@ -55,11 +55,11 @@ const ViewReportPage = () => {
 
     const onSetBookInfo = (data) => {
         setBookInfo({
-             authors: data.authors,
-             isbn: data.isbn,
-             publisher: data.publisher,
-             thumbnail: data.thumbnail,
-             title: data.title
+            authors: data.authors,
+            isbn: data.isbn,
+            publisher: data.publisher,
+            thumbnail: data.thumbnail,
+            bookTitle: data.title
         })
     };
 
@@ -68,7 +68,7 @@ const ViewReportPage = () => {
             contents: data.contents,
             isbn: data.isbn,
             rating: data.rating,
-            ReportTitle: data.ReportTitle,
+            title: data.title,
             views: data.views,
             date: data.date,
             userid: data.userid
@@ -118,7 +118,7 @@ const ViewReportPage = () => {
                         id="filled-read-only-input"
                         label="책 제목"
                         style ={{width: '57%'}} 
-                        value={bookInfo.title}
+                        value={bookInfo.bookTitle}
                         InputProps={{
                             readOnly: true,
                         }}
@@ -149,7 +149,7 @@ const ViewReportPage = () => {
                     id="outlined-basic" 
                     label="독후감 제목" 
                     style ={{width: '98%'}} 
-                    value={ReportInfo.ReportTitle}
+                    value={ReportInfo.title}
                     variant="outlined" />
                 <TextField 
                     id="outlined-basic" 

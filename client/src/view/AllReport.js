@@ -43,8 +43,8 @@ const AllReport = () => {
                             navigate('/ViewReportPage', {state: {isbn: data.isbn, userid: data.userid}});
                         }}>
                             <div className="title">
-                                <p className="bookTitle">{data.title}</p>
-                                <p className="reportTitle">{data.ReportTitle}</p>
+                                <p className="bookTitle">{data.bookTitle}</p>
+                                <p className="reportTitle">{data.title}</p>
                                 <p className="nickName">⭐{data.rating} | {data.userid}</p>
                                 <p className="date">{data.date}</p>
                             </div>

@@ -27,8 +27,8 @@ const TopViewReport = (props) => {
                         navigate('/ViewReportPage', {state: {isbn: data.isbn, userid: data.userid}});
                     }}>
                         <div className="title">
-                            <p className="centerBookTitle">{data.title}</p>
-                            <p className="centerReportTitle">{data.ReportTitle}</p>
+                            <p className="centerBookTitle">{data.bookTitle}</p>
+                            <p className="centerReportTitle">{data.title}</p>
                             <p className="nickName">⭐{data.rating} | {data.userid}</p>
                             <p className="date">{data.date}</p>
                         </div>
