@@ -20,7 +20,7 @@ exports.getBook = async (req, res) => {
   try {
     const data = await pool.query('SELECT * FROM BOOKWEB.BookTB WHERE isbn = ?', [isbn]);
     if (data[0].length != 0) {
-      return res.json(Object.assign(data[0][0], { issuccess: true, message: "success" }));
+      return res.json(Object.assign(data[0], { issuccess: true, message: "success" }));
     } else {
       return res.json({ issuccess: false, message: "no data" });
     }

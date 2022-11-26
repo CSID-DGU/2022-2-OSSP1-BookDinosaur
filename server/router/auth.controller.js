@@ -1,5 +1,5 @@
-const pool = require('../pool');
-const bcrypt = require('bcrypt');
+const pool = require("../pool");
+const bcrypt = require("bcrypt");
 const saltOrRounds = 10;
 
 // id에 해당하는 유저가 있는지 찾고 bcrypt.compare로 비밀번호를 비교
@@ -9,22 +9,27 @@ exports.login = async (req, res) => {
   const password = req.body.password;
 
   try {
-    const data = await pool.query('SELECT * FROM BOOKWEB.UserTB WHERE userid = ?', [userid]);
+    const data = await pool.query(
+      "SELECT * FROM BOOKWEB.UserTB WHERE userid = ?",
+      [userid]
+    );
     // id 유무 체크
-    if (data[0].length != 0) {
-      const userData = data[0][0];
+    if (data.length != 0) {
+      const userData = data[0];
       // password 체크
       const compare = await bcrypt.compare(password, userData.password);
       if (compare) {
         req.session.userId = userData.userid;
         req.session.nickname = userData.nickname;
-        req.session.save(err => {
+        req.session.save((err) => {
           if (err) {
             console.log(err);
             return res.status(500).send("<h1>500 error</h1>");
           }
         });
-        return res.json(Object.assign(req.session, { issuccess: true, message: "success" }));
+        return res.json(
+          Object.assign(req.session, { issuccess: true, message: "success" })
+        );
       } else {
         return res.json({ issuccess: false, message: "wrong password" });
       }
@@ -58,11 +63,16 @@ exports.signup = async (req, res) => {
 
   const hashPassword = bcrypt.hashSync(password, saltOrRounds); // 암호화
   try {
-    const data = await pool.query('SELECT * FROM BOOKWEB.UserTB WHERE userid = ?', [userid]);
+    const data = await pool.query(
+      "SELECT * FROM BOOKWEB.UserTB WHERE userid = ?",
+      [userid]
+    );
     // id 유무 체크 (로그인과 달리 중복 id가 없어야 함)
-    if (data[0].length == 0) {
-      pool.query('INSERT INTO BOOKWEB.UserTB(userid, password, nickname, age, sexuality, preference) VALUES (?,?,?,?,?,?)',
-        [userid, hashPassword, nickname, age, sexuality, preference]);
+    if (data.length == 0) {
+      pool.query(
+        "INSERT INTO BOOKWEB.UserTB(userid, password, nickname, age, sexuality, preference) VALUES (?,?,?,?,?,?)",
+        [userid, hashPassword, nickname, age, sexuality, preference]
+      );
       return res.json({ issuccess: true, message: "register success" });
     } else {
       return res.json({ issuccess: false, message: "id is duplicated" });
@@ -74,7 +84,9 @@ exports.signup = async (req, res) => {
 
 exports.getSession = async (req, res) => {
   try {
-    return res.json(Object.assign(req.session, { issuccess: true, message: "success" }));
+    return res.json(
+      Object.assign(req.session, { issuccess: true, message: "success" })
+    );
   } catch (err) {
     return res.status(500).json(err);
   }
