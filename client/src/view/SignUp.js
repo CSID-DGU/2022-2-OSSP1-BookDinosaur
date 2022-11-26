@@ -75,7 +75,7 @@ const SignUp = () => {
   }
 
   const checkNick = () => {
-    if (nickName != "")
+    if (nickName !== "")
       return !(1 < nickName.length && nickName.length < 11)
     return false;
   }

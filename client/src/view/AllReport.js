@@ -23,14 +23,17 @@ const AllReport = () => {
   const [reportList, setReportList] = useState([]);
   const navigate = useNavigate();
 
-  useEffect(async () => {
-    try {
-      await axios.get("/api/db/bookreports/new").then((res) => {
-        setReportList(res.data.data || []);
-      });
-    } catch (err) {
-      console.log(err);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        await axios.get("/api/db/bookreports/new").then((res) => {
+          setReportList(res.data.data || []);
+        });
+      } catch (err) {
+        console.log(err);
+      }
     }
+    fetchData();
   }, []);
 
   return (
