@@ -10,7 +10,7 @@ import "./SignIn.css";
 const SignIn = () => {
   const navigate = useNavigate();
   // eslint-disable-next-line
-  const setCookie = useCookies(["user"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
