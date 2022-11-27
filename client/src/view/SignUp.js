@@ -1,19 +1,16 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'
-import { Button } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-
-import Checkbox from '@material-ui/core/Checkbox';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-
-import axios from 'axios';
-import './SignUp.css'
+import { Button } from "@material-ui/core";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormGroup from "@material-ui/core/FormGroup";
+import MenuItem from "@material-ui/core/MenuItem";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import Select from "@material-ui/core/Select";
+import TextField from "@material-ui/core/TextField";
+import axios from "axios";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./SignUp.css";
 
 const START_AGE = 10;
 const END_AGE = 100;
@@ -30,13 +27,13 @@ const MenuProps = {
 const SignUp = () => {
   const navigate = useNavigate();
 
-  const [id, setId] = useState('');
-  const [nickName, setNickName] = useState('');
-  const [pw, setPw] = useState('');
-  const [pwConfirm, setPwConfirm] = useState('');
+  const [id, setId] = useState("");
+  const [nickName, setNickName] = useState("");
+  const [pw, setPw] = useState("");
+  const [pwConfirm, setPwConfirm] = useState("");
 
-  const [age, setAge] = useState('');
-  const [gender, setGender] = useState('male');
+  const [age, setAge] = useState("");
+  const [gender, setGender] = useState("male");
   const [genre, setGenre] = useState({
     checkedA: false,
     checkedB: false,
@@ -50,161 +47,138 @@ const SignUp = () => {
     checkedJ: false,
   });
 
-  const onChangeId = (e) => { setId(e.target.value) }
-  const onChangeNickName = (e) => { setNickName(e.target.value) }
-  const onChangePw = (e) => { setPw(e.target.value) }
-  const onChangePwConfirm = (e) => { setPwConfirm(e.target.value) }
+  const onChangeId = (e) => {
+    setId(e.target.value);
+  };
+  const onChangeNickName = (e) => {
+    setNickName(e.target.value);
+  };
+  const onChangePw = (e) => {
+    setPw(e.target.value);
+  };
+  const onChangePwConfirm = (e) => {
+    setPwConfirm(e.target.value);
+  };
 
-  const handleAgeChange = (e) => { setAge(e.target.value) };
-  const handleGenderChange = (e) => { setGender(e.target.value) };
+  const handleAgeChange = (e) => {
+    setAge(e.target.value);
+  };
+  const handleGenderChange = (e) => {
+    setGender(e.target.value);
+  };
 
-  const handleGenreChange = (e) => { setGenre({ ...genre, [e.target.name]: e.target.checked }) };
+  const handleGenreChange = (e) => {
+    setGenre({ ...genre, [e.target.name]: e.target.checked });
+  };
 
   const ageRender = () => {
     const renderResult = [];
     for (let i = START_AGE; i < END_AGE; i++) {
-      renderResult.push(<MenuItem key={i} value={i}>{i}</MenuItem>)
+      renderResult.push(
+        <MenuItem key={i} value={i}>
+          {i}
+        </MenuItem>
+      );
     }
     return renderResult;
-  }
+  };
 
   const checkId = () => {
-    if (id !== "")
-      return !(3 < id.length && id.length < 17);
+    if (id !== "") return !(3 < id.length && id.length < 17);
     return false;
-  }
+  };
 
   const checkNick = () => {
-    if (nickName !== "")
-      return !(1 < nickName.length && nickName.length < 11)
+    if (nickName !== "") return !(1 < nickName.length && nickName.length < 11);
     return false;
-  }
+  };
 
   const checkPw = () => {
-    if (pw !== "")
-      return !((7 < pw.length) && (pw.length < 17));
+    if (pw !== "") return !(7 < pw.length && pw.length < 17);
     return false;
-  }
+  };
+
+  const convertAgeRange = (age) => {
+    if (age < 20) {
+      return 0;
+    } else if (age < 30) {
+      return 1;
+    } else if (age < 40) {
+      return 2;
+    } else if (age < 50) {
+      return 3;
+    } else if (age < 60) {
+      return 4;
+    } else {
+      return 5;
+    }
+  };
+
+  const replaceCharAt = (str, index, chr) => {
+    if (index > str.length - 1) return str;
+    return str.substring(0, index) + chr + str.substring(index + 1);
+  };
+
+  const getConvertedGenreText = (genre) => {
+    let genreText = "0,0,0,0,0,0,0,0,0,0";
+
+    if (genre.checkedA) genreText = replaceCharAt(genreText, 0, "1");
+    if (genre.checkedB) genreText = replaceCharAt(genreText, 2, "1");
+    if (genre.checkedC) genreText = replaceCharAt(genreText, 4, "1");
+    if (genre.checkedD) genreText = replaceCharAt(genreText, 6, "1");
+    if (genre.checkedE) genreText = replaceCharAt(genreText, 8, "1");
+    if (genre.checkedF) genreText = replaceCharAt(genreText, 10, "1");
+    if (genre.checkedG) genreText = replaceCharAt(genreText, 12, "1");
+    if (genre.checkedH) genreText = replaceCharAt(genreText, 14, "1");
+    if (genre.checkedI) genreText = replaceCharAt(genreText, 16, "1");
+    if (genre.checkedJ) genreText = replaceCharAt(genreText, 18, "1");
+
+    return genreText;
+  };
 
   const onClickSignUp = () => {
     if (id === "" || checkId()) {
-      alert("아이디를 입력해주세요.")
-    }
-    else if (nickName === "" || checkNick()) {
-      alert("닉네임을 입력해주세요.")
-    }
-    else if (pw === "" || checkPw()) {
-      alert("비밀번호를 입력해주세요.")
-    }
-    else if (pwConfirm === "") {
-      alert("비밀번호를 확인을 입력해주세요.")
-    }
-    else if (pw !== pwConfirm) {
-      alert("비밀번호를 확인해주세요.")
-    }
-    else if (!age) {
-      alert("나이를 선택해주세요.")
-    }
-    else if (!genre) {
-      alert("장르를 선택해주세요.")
-    }
-    else {
-      function convertAgeRange(age) {
-        if (age < 20) { return 0 }
-        else if (age < 30) { return 1 }
-        else if (age < 40) { return 2 }
-        else if (age < 50) { return 3 }
-        else if (age < 60) { return 4 }
-        else { return 5 }
-      }
-      let genreText = "";
-      function convertGenreCheck(genre) {
-        if (genre.checkedA) {
-          genreText += "1";
-        } else {
-          genreText += "0";
-        }
-        genreText += ",";
-        if (genre.checkedB) {
-          genreText += "1";
-        } else {
-          genreText += "0";
-        }
-        genreText += ",";
-        if (genre.checkedC) {
-          genreText += "1";
-        } else {
-          genreText += "0";
-        }
-        genreText += ",";
-        if (genre.checkedD) {
-          genreText += "1";
-        } else {
-          genreText += "0";
-        }
-        genreText += ",";
-        if (genre.checkedE) {
-          genreText += "1";
-        } else {
-          genreText += "0";
-        }
-        genreText += ",";
-        if (genre.checkedF) {
-          genreText += "1";
-        } else {
-          genreText += "0";
-        }
-        genreText += ",";
-        if (genre.checkedG) {
-          genreText += "1";
-        } else {
-          genreText += "0";
-        }
-        genreText += ",";
-        if (genre.checkedH) {
-          genreText += "1";
-        } else {
-          genreText += "0";
-        }
-        genreText += ",";
-        if (genre.checkedI) {
-          genreText += "1";
-        } else {
-          genreText += "0";
-        }
-        genreText += ",";
-        if (genre.checkedJ) {
-          genreText += "1";
-        } else {
-          genreText += "0";
-        }
-      }
-
-      convertGenreCheck(genre)
+      alert("아이디를 입력해주세요.");
+    } else if (nickName === "" || checkNick()) {
+      alert("닉네임을 입력해주세요.");
+    } else if (pw === "" || checkPw()) {
+      alert("비밀번호를 입력해주세요.");
+    } else if (pwConfirm === "") {
+      alert("비밀번호를 확인을 입력해주세요.");
+    } else if (pw !== pwConfirm) {
+      alert("비밀번호를 확인해주세요.");
+    } else if (!age) {
+      alert("나이를 선택해주세요.");
+    } else if (!genre) {
+      alert("장르를 선택해주세요.");
+    } else {
+      const genreText = getConvertedGenreText(genre);
       // id부터 sexuality까지를 body에 넣어 전달
-      axios.post('/api/db/users', {
-        userid: id,
-        password: pw,
-        nickname: nickName,
-        age: convertAgeRange(age),
-        sexuality: gender,
-        // 장르
-        preference: genreText
-      }).then((res) => {
-        if (res.data.issuccess) {
-          alert("회원가입 되었습니다! 로그인해주세요.")
-          navigate('/');
-        }
-        else {
-          alert(res.data.message)
-        }
-      }).catch((err) => {
-        console.log(err)
-        alert("회원가입 중 오류가 발생했습니다.")
-      })
+      axios
+        .post("/api/db/users", {
+          userid: id,
+          password: pw,
+          nickname: nickName,
+          age: convertAgeRange(age),
+          sexuality: gender,
+          // 장르
+          preference: genreText,
+        })
+        .then((res) => {
+          if (res.data.issuccess) {
+            alert("회원가입 되었습니다! 로그인해주세요.");
+            navigate("/");
+          } else {
+            alert(res.data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("회원가입 중 오류가 발생했습니다.");
+        });
     }
-  }
-  checkNick()
+  };
+
   return (
     <div className="signup-area">
       {/* <Header /> */}
@@ -213,18 +187,33 @@ const SignUp = () => {
 
         <TextField
           error={checkId()}
-          helperText={checkId() ? '4~16자 사이로 입력해주세요' : ''}
-          label="아이디" onChange={onChangeId} />
-        <TextField label="닉네임" onChange={onChangeNickName}
-          error={checkNick()}
-          helperText={checkNick() ? '2~10자 사이로 입력해주세요' : ''} />
-        <TextField type="password" label="패스워드" onChange={onChangePw}
-          error={checkPw()}
-          helperText={checkPw() ? '8~16자 사이로 입력해주세요' : ''} />
+          helperText={checkId() ? "4~16자 사이로 입력해주세요" : ""}
+          label="아이디"
+          onChange={onChangeId}
+        />
         <TextField
-          error={pwConfirm !== "" ? (pw !== pwConfirm) : false}
-          helperText={(pwConfirm !== "" && pw !== pwConfirm) ? '패스워드를 확인해주세요' : ''}
-          type="password" label="패스워드 확인" onChange={onChangePwConfirm}
+          label="닉네임"
+          onChange={onChangeNickName}
+          error={checkNick()}
+          helperText={checkNick() ? "2~10자 사이로 입력해주세요" : ""}
+        />
+        <TextField
+          type="password"
+          label="패스워드"
+          onChange={onChangePw}
+          error={checkPw()}
+          helperText={checkPw() ? "8~16자 사이로 입력해주세요" : ""}
+        />
+        <TextField
+          error={pwConfirm !== "" ? pw !== pwConfirm : false}
+          helperText={
+            pwConfirm !== "" && pw !== pwConfirm
+              ? "패스워드를 확인해주세요"
+              : ""
+          }
+          type="password"
+          label="패스워드 확인"
+          onChange={onChangePwConfirm}
         />
       </div>
 
@@ -239,14 +228,32 @@ const SignUp = () => {
           value={age}
           onChange={handleAgeChange}
         >
-          <MenuItem value="" disabled>선택하세요</MenuItem>
+          <MenuItem value="" disabled>
+            선택하세요
+          </MenuItem>
           {ageRender()}
         </Select>
 
         <h4>성별</h4>
-        <RadioGroup className="gender-box" aria-label="gender" name="gender1" value={gender} onChange={handleGenderChange}>
-          <FormControlLabel value="M" control={<Radio />} labelPlacement="start" label="남자" />
-          <FormControlLabel value="F" control={<Radio />} labelPlacement="start" label="여자" />
+        <RadioGroup
+          className="gender-box"
+          aria-label="gender"
+          name="gender1"
+          value={gender}
+          onChange={handleGenderChange}
+        >
+          <FormControlLabel
+            value="M"
+            control={<Radio />}
+            labelPlacement="start"
+            label="남자"
+          />
+          <FormControlLabel
+            value="F"
+            control={<Radio />}
+            labelPlacement="start"
+            label="여자"
+          />
         </RadioGroup>
 
         <h4>관심 장르</h4>
@@ -365,10 +372,12 @@ const SignUp = () => {
           />
         </FormGroup>
 
-        <Button variant="contained" color="primary" onClick={onClickSignUp}>회원가입</Button>
+        <Button variant="contained" color="primary" onClick={onClickSignUp}>
+          회원가입
+        </Button>
       </div>
     </div>
-  )
+  );
 };
 
 export default SignUp;
