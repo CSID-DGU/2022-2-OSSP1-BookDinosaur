@@ -1,69 +1,57 @@
-// 환경변수 불러오기
-require('dotenv').config({ path: '../.env' });
+require("dotenv").config({ path: "../.env" });
 
-// express 모듈 불러오기
-const express = require('express');
+const express = require("express");
+const path = require("path");
+const session = require("express-session");
+const MemoryStore = require("memorystore")(session); // WARNING: MemoryStore is not designed for a production environment.
 
-// express 객체 생성
+const authRouter = require("./routes/auth");
+const booksRouter = require("./routes/books");
+const bookReportsRouter = require("./routes/bookReports");
+const kakaoRouter = require("./routes/kakao");
+
 const app = express();
+
 app.disable("x-powered-by");
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-// path 모듈 불러오기
-const path = require('path');
-
-// session 모듈 불러오기
-const session = require('express-session');
-const MemoryStore = require('memorystore')(session);
-
-// session 설정
-app.use(session({
-  secret: process.env.SESSION_SECRET,
+// session setup
+const options = {
+  cookie: { maxAge: 1000 * 60 * 60 },
   resave: false,
-  saveUninitialized: true,
   rolling: true,
+  secret: process.env.SESSION_SECRET,
+  store: new MemoryStore({ checkPeriod: 1000 * 60 * 60 }),
+};
+app.use(session(options));
 
-  store: new MemoryStore({
-    checkPeriod: 1000 * 60 * 60 // 1시간 유효
-  }),
-  cookie: {
-    httpOnly: true,
-    maxAge: 1000 * 60 * 60 // 1시간 유효
-    // localhost 접근이 https가 아닌 https이므로 동작하지 않음, 현시점에서는 보류
-    //sameSite : 'none', 
-    //secure : true,
-  }
-}));
+app.use("/auth", authRouter);
+app.use("/books", booksRouter);
+app.use("/bookReports", bookReportsRouter);
+app.use("/kakao", kakaoRouter);
 
-// body-parser 모듈 불러오기
-const bodyParser = require('body-parser');
+const port = process.env.PORT || "5000";
+app.listen(port, () => console.log(`server is running ${port}`));
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
+// serve static files
+app.use(express.static(path.join(__dirname, "../client/build")));
+app.get("*", (req, res) => {
+  res.sendFile(pathFjoin(__dirname, "../client/build/index.html"));
+});
 
-// parse application/json
-app.use(bodyParser.json());
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  next(createError(404));
+});
 
-// Router 모듈 불러오기
-const kakao = require("./router/kakao.js");
-const auth = require("./router/auth.js");
-const books = require("./router/books.js");
-const bookReports = require("./router/book-reports.js");
-const recommendedBooks = require("./router/recommended-books.js");
+// error handler
+app.use(function (err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get("env") === "development" ? err : {};
 
-// 기본 포트를 app 객체에 설정
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`server is running ${PORT}`));
-
-// 리액트 정적 파일 제공
-app.use(express.static(path.join(__dirname, '../client/build')));
-
-// 라우트 설정
-app.use(kakao);
-app.use(auth);
-app.use(books);
-app.use(bookReports);
-app.use(recommendedBooks);
-
-app.get('*', (req, res) => {
-  res.sendFile(pathFjoin(__dirname, '../client/build/index.html'));
+  // render the error page
+  res.status(err.status || 500);
+  res.render("error");
 });
