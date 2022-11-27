@@ -69,7 +69,10 @@ exports.getRecommendedBooksByRatings = async (req, res) => {
 
     dataMat.push(sessionUserRating); // 현재 추천해줄 유저의 평점 정보 추가
 
-    const process = spawn("python", ["python/svd.py", JSON.stringify(dataMat)]);
+    const process = spawn("/usr/bin/python", [
+      "python/svd.py",
+      JSON.stringify(dataMat),
+    ]);
     // stdout에 대한 콜백
     process.stdout.on("data", async function (data) {
       // 받아온 데이터는 추천 순위 인덱스 정보이므로 해당 인덱스에 해당하는 isbn을 찾아 실제 도서 정보를 넘겨줘야 함
@@ -146,7 +149,7 @@ exports.getRecommendedBooksByPreferences = async (req, res) => {
 
     let result;
 
-    const process = spawn("python", [
+    const process = spawn("/usr/bin/python", [
       "python/cos.py",
       JSON.stringify(preferMat),
       JSON.stringify(myPrefer),
