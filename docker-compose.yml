@@ -22,10 +22,8 @@ services:
     ports:
       - 3308:3306
     volumes:
-      - ./mariadb/conf.d:/etc/mysql/conf.d
-      - ./mariadb/data:/var/lib/mysql
-      - ./mariadb/initdb.d:/docker-entrypoint-initdb.d
+      - "./db/conf.d:/etc/mysql/conf.d"
+      - "./db/data:/var/lib/mysql"
+      - "./db/initdb.d:/docker-entrypoint-initdb.d"
     env_file: .env
-    environment:
-      TZ: Asia/Seoul
     restart: always
