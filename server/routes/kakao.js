@@ -7,7 +7,7 @@ const router = express.Router();
 
 // 카카오API 도서 검색(첫번째 검색 결과)
 // 최종 결과물에서는 사용되지 않았음
-router.get("/api/kakao/search/single/:title", async (req, res) => {
+router.get("search/single/:title", async (req, res) => {
   await axios
     .get("https://dapi.kakao.com/v3/search/book?target=title", {
       params: {
@@ -26,7 +26,7 @@ router.get("/api/kakao/search/single/:title", async (req, res) => {
 });
 
 // 카카오API 도서 검색(1번~10번까지의 검색 결과)
-router.get("/api/kakao/search/multiple/:title", async (req, res) => {
+router.get("search/multiple/:title", async (req, res) => {
   await axios
     .get("https://dapi.kakao.com/v3/search/book?target=title", {
       params: {

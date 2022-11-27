@@ -4,7 +4,7 @@ const saltOrRounds = 10;
 
 // id에 해당하는 유저가 있는지 찾고 bcrypt.compare로 비밀번호를 비교
 // 성공하면 세션에 유저 정보 담아서 프론트로 넘겨줌
-exports.login = async (req, res) => {
+exports.createSession = async (req, res) => {
   const userid = req.body.userid;
   const password = req.body.password;
 

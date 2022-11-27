@@ -1,4 +1,6 @@
+const { query } = require("../pool");
 const pool = require("../pool");
+const { get } = require("./users");
 
 exports.createBookReport = async (req, res) => {
   if (req.session.userId) {
@@ -25,16 +27,15 @@ exports.createBookReport = async (req, res) => {
   }
 };
 
-// Get Book report 1
-// 독후감 정보 가져오기(모든 정보, 최신순 정렬)
-exports.getBookReportsSortByDate = async (req, res) => {
+exports.getBookReports = async (req, res) => {
   try {
-    const data = await pool.query(
-      "SELECT R.*, B.title AS bookTitle FROM BOOKWEB.BookReportTB AS R JOIN BOOKWEB.BookTB AS B ON R.isbn = B.isbn ORDER BY date DESC"
-    );
-    if (data.length != 0) {
+    const sql = getSQL();
+    const values = getValues();
+    const queryDataSets = await pool.query(sql, values);
+
+    if (queryDataSets.length != 0) {
       const jsonData = new Object();
-      jsonData.data = data;
+      jsonData.data = queryDataSets;
       return res.json(
         Object.assign(jsonData, { issuccess: true, message: "success" })
       );
@@ -44,73 +45,21 @@ exports.getBookReportsSortByDate = async (req, res) => {
   } catch (err) {
     return res.status(500).json(err);
   }
-};
 
-// Get Book report 2
-// 독후감 정보 가져오기(모든 정보, 조회수순 정렬)
-exports.getBookReportsSortByView = async (req, res) => {
-  try {
-    const data = await pool.query(
-      "SELECT R.*, B.title AS bookTitle, B.thumbnail FROM BOOKWEB.BookReportTB AS R JOIN BOOKWEB.BookTB AS B ON R.isbn = B.isbn ORDER BY views DESC"
-    );
-    console.log(data);
-    if (data.length != 0) {
-      const jsonData = new Object();
-      jsonData.data = data;
-      return res.json(
-        Object.assign(jsonData, { issuccess: true, message: "success" })
-      );
-    } else {
-      return res.json({ issuccess: false, message: "no data" });
-    }
-  } catch (err) {
-    return res.status(500).json(err);
+  function getSQL() {
+    if (req.query.sort == "date")
+      return "SELECT R.*, B.title AS bookTitle FROM BOOKWEB.BookReportTB AS R JOIN BOOKWEB.BookTB AS B ON R.isbn = B.isbn ORDER BY date DESC";
+    else if (req.query.sort == "view")
+      return "SELECT R.*, B.title AS bookTitle, B.thumbnail FROM BOOKWEB.BookReportTB AS R JOIN BOOKWEB.BookTB AS B ON R.isbn = B.isbn ORDER BY views DESC";
+    else if (req.query.isbn && !req.query.userid)
+      return "SELECT R.*, B.title AS bookTitle FROM BOOKWEB.BookReportTB R JOIN BOOKWEB.BookTB B ON R.isbn = B.isbn WHERE R.isbn = ? ORDER BY date DESC";
+    else if (!req.query.isbn && req.query.userid)
+      return "SELECT R.*, B.title AS bookTitle FROM BOOKWEB.BookReportTB R JOIN BOOKWEB.BookTB B ON R.isbn = B.isbn WHERE R.userid = ? ORDER BY date DESC";
   }
-};
 
-// Get Book report 3
-// 독후감 정보 가져오기(isbn 기준, 최신순 정렬)
-exports.getBookReportsByISBN = async (req, res) => {
-  const { isbn } = req.params;
-  try {
-    const data = await pool.query(
-      "SELECT R.*, B.title AS bookTitle FROM BOOKWEB.BookReportTB R JOIN BOOKWEB.BookTB B ON R.isbn = B.isbn WHERE R.isbn = ? ORDER BY date DESC",
-      [isbn]
-    );
-    if (data.length != 0) {
-      const jsonData = new Object();
-      jsonData.data = data;
-      return res.json(
-        Object.assign(jsonData, { issuccess: true, message: "success" })
-      );
-    } else {
-      return res.json({ issuccess: false, message: "no data" });
-    }
-  } catch (err) {
-    return res.status(500).json(err);
-  }
-};
-
-// Get Book report 4
-// 독후감 정보 가져오기(userid 기준, 최신순 정렬)
-exports.getBookReportsByUserID = async (req, res) => {
-  const { userid } = req.params;
-  try {
-    const data = await pool.query(
-      "SELECT R.*, B.title AS bookTitle FROM BOOKWEB.BookReportTB R JOIN BOOKWEB.BookTB B ON R.isbn = B.isbn WHERE R.userid = ? ORDER BY date DESC",
-      [userid]
-    );
-    if (data.length != 0) {
-      const jsonData = new Object();
-      jsonData.data = data;
-      return res.json(
-        Object.assign(jsonData, { issuccess: true, message: "success" })
-      );
-    } else {
-      return res.json({ issuccess: false, message: "no data" });
-    }
-  } catch (err) {
-    return res.status(500).json(err);
+  function getValues() {
+    if (req.query.isbn && !req.query.userid) return [isbn];
+    else if (!req.query.isbn && req.query.userid) return [userid];
   }
 };
 

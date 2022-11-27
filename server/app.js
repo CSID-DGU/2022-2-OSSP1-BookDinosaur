@@ -9,6 +9,7 @@ const authRouter = require("./routes/auth");
 const booksRouter = require("./routes/books");
 const bookReportsRouter = require("./routes/bookReports");
 const kakaoRouter = require("./routes/kakao");
+const usersRouter = require("./routes/user");
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use("/auth", authRouter);
 app.use("/books", booksRouter);
 app.use("/bookReports", bookReportsRouter);
 app.use("/kakao", kakaoRouter);
+app.use("/user", usersRouter);
 
 const port = process.env.PORT || "5000";
 app.listen(port, () => console.log(`server is running ${port}`));

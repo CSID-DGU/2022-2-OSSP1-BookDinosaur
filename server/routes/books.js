@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const controller = require("./books.controller");
+const books = require("./books.controller");
 
-router.post("/api/db/books", controller.createBook);
-router.get("/api/db/books/:isbn", controller.getBook);
+router.post("/", books.createBook);
+router.get("/:isbn", books.readBook);
+router.get("/recommended/rating", books.readRecommendedBooksByRatings);
+router.get("/recommended/preferences", books.readRecommendedBooksByPreferences);
 
 module.exports = router;
