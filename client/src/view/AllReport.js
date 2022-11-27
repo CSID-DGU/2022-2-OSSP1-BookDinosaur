@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import url from "url";
 import "../component/ShortReport.css";
 
 const Wrapper = styled.div`
@@ -26,7 +27,10 @@ const AllReport = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        await axios.get("/api/db/bookreports/new").then((res) => {
+        const params = new url.URLSearchParams({
+          sort: "date",
+        });
+        await axios.get("/api/book-reports", params.toString()).then((res) => {
           setReportList(res.data.data || []);
         });
       } catch (err) {

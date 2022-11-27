@@ -155,7 +155,7 @@ const SignUp = () => {
       const genreText = getConvertedGenreText(genre);
       // id부터 sexuality까지를 body에 넣어 전달
       axios
-        .post("/api/db/users", {
+        .post("/api/users", {
           userid: id,
           password: pw,
           nickname: nickName,

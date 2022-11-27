@@ -9,7 +9,7 @@ const SvdRecommend = (props) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        await axios.get("/api/recommend/svd").then((res) => {
+        await axios.get("/api/books/recommended/ratings").then((res) => {
           setRecommendList(res.data.data || []);
         });
       } catch (err) {

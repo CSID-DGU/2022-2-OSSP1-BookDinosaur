@@ -9,7 +9,7 @@ const CosineRecommend = (props) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        await axios.get("/api/recommend/cos").then((res) => {
+        await axios.get("/api/books/recommended/preferences").then((res) => {
           setRecommendList(res.data.data || []);
         });
       } catch (err) {

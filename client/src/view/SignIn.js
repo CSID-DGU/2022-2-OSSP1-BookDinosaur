@@ -29,7 +29,7 @@ const SignIn = () => {
       alert("비밀번호를 입력해주세요");
     } else {
       axios
-        .post("/api/db/users/login", {
+        .post("/api/auth", {
           userid: id,
           password: pw,
         })

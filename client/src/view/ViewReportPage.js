@@ -79,7 +79,7 @@ const ViewReportPage = () => {
     async function fetchData() {
       try {
         await axios
-          .get("/api/db/bookreports/" + state.isbn + "/" + state.userid)
+          .get("/api/book-reports/" + state.isbn + "/" + state.userid)
           .then((res) => {
             return res.data;
           })
@@ -100,7 +100,7 @@ const ViewReportPage = () => {
     async function fetchData() {
       try {
         await axios
-          .get("/api/db/books/" + bookIsbn)
+          .get("/api/books/" + bookIsbn)
           .then((res) => {
             return res.data;
           })
