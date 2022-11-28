@@ -1,11 +1,12 @@
 // 환경변수 불러오기
-require('dotenv').config({path: '../.env'});
+require('dotenv').config({ path: '../.env' });
 
 // express 모듈 불러오기
 const express = require('express');
 
 // express 객체 생성
 const app = express();
+app.disable("x-powered-by");
 
 // path 모듈 불러오기
 const path = require('path');
@@ -16,25 +17,25 @@ const MemoryStore = require('memorystore')(session);
 
 // session 설정
 app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    rolling : true,
-    
-    store: new MemoryStore({
-        checkPeriod: 1000 * 60 * 60 // 1시간 유효
-    }),
-    cookie : {
-        httpOnly : true,
-        maxAge : 1000 * 60 * 60 // 1시간 유효
-        // localhost 접근이 https가 아닌 https이므로 동작하지 않음, 현시점에서는 보류
-        //sameSite : 'none', 
-        //secure : true,
-    }
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  rolling: true,
+
+  store: new MemoryStore({
+    checkPeriod: 1000 * 60 * 60 // 1시간 유효
+  }),
+  cookie: {
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 // 1시간 유효
+    // localhost 접근이 https가 아닌 https이므로 동작하지 않음, 현시점에서는 보류
+    //sameSite : 'none', 
+    //secure : true,
+  }
 }));
 
 // body-parser 모듈 불러오기
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -43,8 +44,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Router 모듈 불러오기
-const routes = require("./Router/routes.js");
-const api = require("./Router/api.js");
+const kakao = require("./router/kakao.js");
+const auth = require("./router/auth.js");
+const books = require("./router/books.js");
+const bookReports = require("./router/book-reports.js");
+const recommendedBooks = require("./router/recommended-books.js");
 
 // 기본 포트를 app 객체에 설정
 const PORT = process.env.PORT || 5000;
@@ -54,9 +58,12 @@ app.listen(PORT, () => console.log(`server is running ${PORT}`));
 app.use(express.static(path.join(__dirname, '../client/build')));
 
 // 라우트 설정
-app.use(api);
-app.use(routes);
+app.use(kakao);
+app.use(auth);
+app.use(books);
+app.use(bookReports);
+app.use(recommendedBooks);
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+  res.sendFile(pathFjoin(__dirname, '../client/build/index.html'));
 });

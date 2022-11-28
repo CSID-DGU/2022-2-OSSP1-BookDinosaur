@@ -16,6 +16,7 @@ RUN python -m pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 # install npm modules
+RUN apt-get update
 RUN npm install
 WORKDIR /usr/src/app/server
 CMD ["node", "server.js"]
