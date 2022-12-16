@@ -1,6 +1,5 @@
 const { query } = require("../pool");
 const pool = require("../pool");
-const { get } = require("./users");
 
 exports.createBookReport = async (req, res) => {
   if (req.session.userId) {
@@ -29,6 +28,7 @@ exports.createBookReport = async (req, res) => {
 
 exports.getBookReports = async (req, res) => {
   try {
+    console.log(req.query);
     const sql = getSQL();
     const values = getValues();
     const queryDataSets = await pool.query(sql, values);
@@ -43,6 +43,7 @@ exports.getBookReports = async (req, res) => {
       return res.json({ issuccess: false, message: "no data" });
     }
   } catch (err) {
+    console.log(err);
     return res.status(500).json(err);
   }
 

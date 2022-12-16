@@ -5,7 +5,6 @@ import { useCookies } from "react-cookie";
 import ImportContactsIcon from "@material-ui/icons/ImportContacts";
 import MultipleBookSearch from "./MultipleBookSearch";
 import styled from "styled-components"; //CSS-IN_JS
-import url from "url";
 import "./Header.css";
 
 const Spacing = styled.div`
@@ -31,9 +30,8 @@ const Header = () => {
   // eslint-disable-next-line
   const [cookies, removeCookie] = useCookies(["user"]);
 
-  const params = new url.URLSearchParams({ userid: cookies?.user?.userId });
   axios
-    .get("/api/book-reports", params.toString())
+    .get("/api/book-reports", { params: { userid: cookies?.user?.userId } })
     .then((res) => {
       setBookReportCount(res.data.data?.length || 0);
     })
@@ -68,7 +66,7 @@ const Header = () => {
         <div
           onClick={() => {
             axios
-              .get("/api/db/users/logout")
+              .get("/api/auth/logout")
               .then((res) => {
                 return res.data;
               })

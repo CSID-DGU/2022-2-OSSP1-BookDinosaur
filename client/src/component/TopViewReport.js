@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import url from "url";
 import "./TopViewReport.css";
 //이상하게 ShortReport.css 적용이 되어서 css 클래스 이름을 바꿔야지 TopViewReport.css 효과 적용됨.
 
@@ -12,12 +11,11 @@ const TopViewReport = (props) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const params = new url.URLSearchParams({
-          sort: "view",
-        });
-        await axios.get("/api/book-reports", params.toString()).then((res) => {
-          setReportList(res.data.data || []);
-        });
+        await axios
+          .get("/api/book-reports", { params: { sort: "date" } })
+          .then((res) => {
+            setReportList(res.data.data || []);
+          });
       } catch (err) {
         console.log(err);
       }

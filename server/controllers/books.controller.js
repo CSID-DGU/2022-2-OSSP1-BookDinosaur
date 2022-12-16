@@ -1,4 +1,5 @@
 const pool = require("../pool");
+const spawn = require("child_process").spawn;
 
 exports.createBook = async (req, res) => {
   const isbn = req.body.isbn;
@@ -35,9 +36,6 @@ exports.readBook = async (req, res) => {
     return res.status(500).json(err);
   }
 };
-
-const pool = require("../pool");
-const spawn = require("child_process").spawn;
 
 // get recommend data
 exports.readRecommendedBooksByRatings = async (req, res) => {

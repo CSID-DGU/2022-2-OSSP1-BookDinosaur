@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import url from "url";
 import "./ShortReport.css";
 
 const Main = (props) => {
   const [reportList, setReportList] = useState([]);
   const navigate = useNavigate();
 
-  const params = new url.URLSearchParams({ isbn: props.isbn });
   useEffect(() => {
     axios
-      .get("/api/book-reports", params.toString())
+      .get("/api/book-reports", { params: { isbn: props.isbn } })
       .then((res) => {
         setReportList(res.data.data || []);
       })

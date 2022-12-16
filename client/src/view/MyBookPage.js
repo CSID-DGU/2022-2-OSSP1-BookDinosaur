@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import styled from "styled-components"; //CSS-IN_JS
-import url from "url";
 import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
@@ -21,10 +20,9 @@ export default function MyBookPage() {
   const [reportList, setReportList] = useState([]);
   const navigate = useNavigate();
 
-  const params = new url.URLSearchParams({ userid: cookies?.user?.userId });
   useEffect(() => {
     axios
-      .get("/api/book-reports", params.toString())
+      .get("/api/book-reports", { params: { userid: cookies?.user?.userId } })
       .then((res) => {
         setReportList(res.data.data || []);
       })

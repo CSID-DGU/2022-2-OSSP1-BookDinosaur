@@ -1,4 +1,4 @@
-require("dotenv").config({ path: "../.env" });
+require("dotenv").config({ path: ".env" });
 
 const express = require("express");
 const path = require("path");
@@ -7,9 +7,9 @@ const MemoryStore = require("memorystore")(session); // WARNING: MemoryStore is 
 
 const authRouter = require("./routes/auth");
 const booksRouter = require("./routes/books");
-const bookReportsRouter = require("./routes/bookReports");
+const bookReportsRouter = require("./routes/book-reports");
 const kakaoRouter = require("./routes/kakao");
-const usersRouter = require("./routes/user");
+const usersRouter = require("./routes/users");
 
 const app = express();
 
@@ -22,6 +22,7 @@ const options = {
   cookie: { maxAge: 1000 * 60 * 60 },
   resave: false,
   rolling: true,
+  saveUninitialized: true,
   secret: process.env.SESSION_SECRET,
   store: new MemoryStore({ checkPeriod: 1000 * 60 * 60 }),
 };
@@ -29,11 +30,11 @@ app.use(session(options));
 
 app.use("/auth", authRouter);
 app.use("/books", booksRouter);
-app.use("/bookReports", bookReportsRouter);
+app.use("/book-reports", bookReportsRouter);
 app.use("/kakao", kakaoRouter);
-app.use("/user", usersRouter);
+app.use("/users", usersRouter);
 
-const port = process.env.PORT || "5000";
+const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`server is running ${port}`));
 
 // serve static files
