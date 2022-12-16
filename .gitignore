@@ -213,3 +213,6 @@ server/sessions
 
 ### python venv ###
 .venv
+
+### db folder ###
+db
