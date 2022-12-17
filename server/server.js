@@ -29,7 +29,7 @@ app.use(session({
     httpOnly: true,
     maxAge: 1000 * 60 * 60 // 1시간 유효
     // localhost 접근이 https가 아닌 https이므로 동작하지 않음, 현시점에서는 보류
-    //sameSite : 'none', 
+    //sameSite : 'none',
     //secure : true,
   }
 }));
@@ -55,7 +55,7 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`server is running ${PORT}`));
 
 // 리액트 정적 파일 제공
-app.use(express.static(path.join(__dirname, '../client/build')));
+app.use(express.static(path.join(__dirname, '../frontend/build')));
 
 // 라우트 설정
 app.use(kakao);
@@ -65,5 +65,5 @@ app.use(bookReports);
 app.use(recommendedBooks);
 
 app.get('*', (req, res) => {
-  res.sendFile(pathFjoin(__dirname, '../client/build/index.html'));
+  res.sendFile(pathFjoin(__dirname, '../frontend/build/index.html'));
 });
