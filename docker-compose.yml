@@ -1,28 +1,32 @@
-version: "3"
 services:
-  api:
-    build:
-      dockerfile: Dockerfile
-      context: ./
-    volumes:
-      - /usr/src/app/node_modules
-      - ./:/usr/src/app
-  frontend:
-    stdin_open: true
-    build:
-      dockerfile: Dockerfile
-      context: ./frontend
-    image: homubee/bookrec-client
-    volumes:
-      - /usr/src/app/frontend/node_modules
-      - ./frontend:/usr/src/app/frontend
-  mariadb:
-    image: mariadb:10
-    ports:
-      - 3308:3306
-    volumes:
-      - "./db/conf.d:/etc/mysql/conf.d"
-      - "./db/data:/var/lib/mysql"
-      - "./db/initdb.d:/docker-entrypoint-initdb.d"
-    env_file: .env
-    restart: always
+    frontend:
+        build: frontend
+        export:
+            - "80"
+        networks:
+            - front-tier
+
+    backend:
+        build: backend
+        export:
+            - "3000"
+        networks:
+            - front-tier
+            - back-tier
+        env_file:
+            - backend/.env
+
+    database:
+        image: mariadb
+        ports:
+            - "3306"
+        networks:
+            - back-tier
+        volumes:
+            - ./db:/var/lib/mysql
+        env_file:
+            - backend/.env
+
+networks:
+    front-tier:
+    back-tier:
