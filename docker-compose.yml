@@ -31,3 +31,8 @@ services:
 networks:
     front-tier:
     back-tier:
+
+
+volumes:
+    mariadb-data:
+        external: true
