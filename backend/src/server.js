@@ -52,7 +52,7 @@ const recommendedBooks = require("./router/recommended-books.js")
 
 // 기본 포트를 app 객체에 설정
 const PORT = process.env.PORT || 5000
-app.listen(PORT, () => console.log(`server is running ${PORT}, ${process.env.DB_NAME}`))
+app.listen(PORT, () => console.log(`server is running ${PORT}`))
 
 // 라우트 설정
 app.use(kakao)

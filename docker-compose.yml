@@ -15,6 +15,7 @@ services:
             - back-tier
         env_file:
             - backend/.env
+        restart: on-failure
 
     database:
         image: mariadb
@@ -23,7 +24,7 @@ services:
         networks:
             - back-tier
         volumes:
-            - ./db:/var/lib/mysql
+            - mariadb-data:/var/lib/mysql
         env_file:
             - backend/.env
 
