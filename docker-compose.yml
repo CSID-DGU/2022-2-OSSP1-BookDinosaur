@@ -1,14 +1,14 @@
 services:
     frontend:
         build: frontend
-        export:
+        ports:
             - "80"
         networks:
             - front-tier
 
     backend:
         build: backend
-        export:
+        expose:
             - "3000"
         networks:
             - front-tier
@@ -18,7 +18,7 @@ services:
 
     database:
         image: mariadb
-        ports:
+        expose:
             - "3306"
         networks:
             - back-tier
