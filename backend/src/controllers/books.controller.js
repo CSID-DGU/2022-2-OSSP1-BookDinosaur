@@ -8,7 +8,7 @@ exports.createBook = async (req, res) => {
     const thumbnail = req.body.thumbnail
     try {
         await pool.query(
-            "INSERT INTO BOOKWEB.BookTB(isbn, title, authors, publisher, thumbnail) VALUES (?,?,?,?,?)",
+            "INSERT INTO BOOKWEB.BookTB(isbn, title, authors, publisher, thumbnail_M) VALUES (?,?,?,?,?)",
             [isbn, title, authors, publisher, thumbnail]
         )
         return res.json({ issuccess: true, message: "add book success" })

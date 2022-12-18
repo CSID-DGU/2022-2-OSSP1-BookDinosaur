@@ -54,9 +54,8 @@ exports.getBookReportsSortByDate = async (req, res) => {
 exports.getBookReportsSortByView = async (req, res) => {
     try {
         const data = await pool.query(
-            "SELECT R.*, B.title AS bookTitle, B.thumbnail FROM BOOKWEB.BookReportTB AS R JOIN BOOKWEB.BookTB AS B ON R.isbn = B.isbn ORDER BY views DESC"
+            "SELECT R.*, B.title AS bookTitle, B.thumbnail_M FROM BOOKWEB.BookReportTB AS R JOIN BOOKWEB.BookTB AS B ON R.isbn = B.isbn ORDER BY views DESC"
         )
-        console.log(data)
         if (data.length != 0) {
             const jsonData = new Object()
             jsonData.data = data
