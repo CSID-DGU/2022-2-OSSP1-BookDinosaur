@@ -2,7 +2,7 @@ services:
     frontend:
         build: frontend
         ports:
-            - "80"
+            - "49163:80"
         networks:
             - front-tier
 
@@ -27,6 +27,7 @@ services:
             - mariadb-data:/var/lib/mysql
         env_file:
             - backend/.env
+        restart: on-failure
 
 networks:
     front-tier:
