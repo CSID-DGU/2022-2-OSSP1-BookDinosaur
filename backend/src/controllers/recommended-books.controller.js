@@ -1,45 +1,9 @@
 const pool = require("../pool")
 const spawn = require("child_process").spawn
 
-exports.createBook = async (req, res) => {
-    const isbn = req.body.isbn
-    const title = req.body.title
-    const authors = req.body.authors
-    const publisher = req.body.publisher
-    const thumbnail = req.body.thumbnail
-    try {
-        await pool.query(
-            "INSERT INTO BOOKWEB.BookTB(isbn, title, authors, publisher, thumbnail) VALUES (?,?,?,?,?)",
-            [isbn, title, authors, publisher, thumbnail]
-        )
-        return res.json({ issuccess: true, message: "add book success" })
-    } catch (err) {
-        return res.json({ issuccess: false, message: "db error" })
-    }
-}
-
-exports.readBook = async (req, res) => {
-    const { isbn } = req.params
-    try {
-        const data = await pool.query(
-            "SELECT * FROM BOOKWEB.BookTB WHERE isbn = ?",
-            [isbn]
-        )
-        if (data[0].length != 0) {
-            return res.json(
-                Object.assign(data[0], { issuccess: true, message: "success" })
-            )
-        } else {
-            return res.json({ issuccess: false, message: "no data" })
-        }
-    } catch (err) {
-        return res.status(500).json(err)
-    }
-}
-
 // get recommend data
-exports.readRecommendedBooksByRatings = async (req, res) => {
-    // result 변수에 최종 데이터 담아 넘겨주면 될 듯
+exports.getRecommendedBooksByRatings = async (req, res) => {
+    // result 변수에 최종 데이터 담아 넘겨주면 될 듯s
     let result
 
     try {
@@ -109,7 +73,7 @@ exports.readRecommendedBooksByRatings = async (req, res) => {
         dataMat.push(sessionUserRating) // 현재 추천해줄 유저의 평점 정보 추가
 
         const process = spawn("/usr/bin/python", [
-            "python/svd.py",
+            "../python/svd.py",
             JSON.stringify(dataMat),
         ])
         // stdout에 대한 콜백
@@ -159,7 +123,7 @@ exports.readRecommendedBooksByRatings = async (req, res) => {
 }
 
 // get recommend data (cosine)
-exports.readRecommendedBooksByPreferences = async (req, res) => {
+exports.getRecommendedBooksByPreferences = async (req, res) => {
     try {
         //나를 제외하고 독후감을 하나 이상 쓴 모든 유저의 userid, preference 가져오기
         let userData
@@ -192,7 +156,7 @@ exports.readRecommendedBooksByPreferences = async (req, res) => {
         let result
 
         const process = spawn("/usr/bin/python", [
-            "python/cos.py",
+            "../python/cos.py",
             JSON.stringify(preferMat),
             JSON.stringify(myPrefer),
         ])

@@ -1,27 +1,39 @@
 services:
     frontend:
-        build: ./frontend
-        depend_on: backend
+        build: frontend
+        ports:
+            - "49163:80"
+        networks:
+            - front-tier
 
     backend:
-        build:
-            dockerfile: Dockerfile
-            context: ./backend
-        volumes:
+        build: backend
+        expose:
+            - "3000"
+        networks:
+            - front-tier
+            - back-tier
+        env_file:
+            - backend/.env
+        restart: on-failure
 
-    db:
-        image: mariadb:10
+    database:
+        image: mariadb
         expose:
             - "3306"
+        networks:
+            - back-tier
         volumes:
-        - type: volume
-            source: mariadb-data
-            target: /var/lib/mysql
-        - type: bind
-            source: /opt/app/db/conf.d
-            target: /etc/mysql/conf.d
-        - type: bind
-            source: /opt/app/db/docker-entrypoint-initdb.d
-            target: /docker-entrypoint-initdb.d
-        env_file: .env
-        restart: always
+            - mariadb-data:/var/lib/mysql
+        env_file:
+            - backend/.env
+        restart: on-failure
+
+networks:
+    front-tier:
+    back-tier:
+
+
+volumes:
+    mariadb-data:
+        external: true

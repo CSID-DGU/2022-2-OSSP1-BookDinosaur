@@ -1,13 +1,13 @@
 {
-  "scripts": {
-    "start": "node server/app.js",
-    "server": "nodemon server/app.js",
-    "front": "cd client && npm start",
-    "dev": "concurrently \"npm run server\" \"npm run front\"",
-    "test": "cd client && npm test"
-  },
-  "devDependencies": {
-    "concurrently": "^7.1.0",
-    "nodemon": "^2.0.16"
-  }
+    "name": "book-dinosaur",
+    "version": "1.0.0",
+    "devDependencies": {
+        "concurrently": "^7.6.0"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "frontend": "cd frontend && npm start",
+        "backend": "cd backend && npm start",
+        "start": "concurrently \"npm run frontend\" \"npm run backend\""
+    }
 }
