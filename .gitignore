@@ -206,7 +206,7 @@ sketch
 # End of https://www.toptal.com/developers/gitignore/api/dotenv
 
 ### build folder ###
-client/build
+frontend/build
 
 ### session ###
 server/sessions
