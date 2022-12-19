@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'node:lts-alpine'
+      image 'node'
       args '-p 3000:3000 -p 5000:5000'
     }
   }
@@ -12,7 +12,7 @@ pipeline {
     WEBHOOK_URL = credentials('BOOKDINOSAUR_DISCORD_WEBHOOK_URL')
   }
   options {
-    timeout(time: 3, unit: 'MINUTES') 
+    timeout(time: 3, unit: 'MINUTES')
   }
   stages {
     stage('SCM') {
