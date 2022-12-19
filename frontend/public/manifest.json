@@ -1,0 +1,15 @@
+{
+  "short_name": "Read Lead",
+  "name": "Read Lead: Book report website",
+  "icons": [
+    {
+      "src": "dongguk_logo.jpg",
+      "type": "image/jpg",
+      "sizes": "900x900"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
