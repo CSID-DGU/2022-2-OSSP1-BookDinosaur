@@ -6,7 +6,7 @@ node {
   }
   stage('Install dependencies') {
     sh "npm install"
-    sh "cd client && npm install"
+    sh "cd frontend && npm install"
   }
   stage('Test and coverage') {
     sh "CI=true npm test"
