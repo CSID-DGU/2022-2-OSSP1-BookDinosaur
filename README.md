@@ -5,21 +5,23 @@
 > 
 > BookDinosaur 프로젝트
 > 
-> 기존의 Read Lead 사이트를 보완
->
 > https://bookdinosaur.tk/
+>
+> 기존의 Read Lead 사이트(http://146.56.172.91/) 보완
+>
+> (https://github.com/CSID-DGU/2022-01-OSSP1-NoHongchulRed-1)
 
 
 
 
 ## Team Member
 
-|학번|이름|역할|
-|------|---|---|
-|2020112119|강동희|추천시스템알고리즘|
-|2019113328|박근용|보안|
-|2020110128|박지민|서버,데이터베이스|
-|2018112180|정대용|리팩토링,테스팅|
+|학과|학번|이름|역할|
+|------|------|---|---|
+|컴퓨터공학과|2020112119|강동희|추천시스템알고리즘|
+|컴퓨터공학과|2019113328|박근용|보안|
+|국어국문문예창작학부|2020110128|박지민|서버,데이터베이스|
+|컴퓨터공학과|2018112180|정대용|리팩토링,테스팅|
 
 
 
@@ -38,7 +40,7 @@
   <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white">
   <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
   <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black">
-  <img src="https://img.shields.io/badge/MUI-2196F3?style=for-the-badge&logo=MUI&logoColor=white">
+  <img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white">
   <img src="https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=Express&logoColor=white">
   <br>
 
