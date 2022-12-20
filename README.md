@@ -3,7 +3,7 @@
 > 
 > BookDinosaur 프로젝트
 > 
-> 기존의 <Read Lead> 사이트를 보완
+> 기존의 Read Lead 사이트를 보완
 
 
 ## Demo Website
@@ -33,7 +33,7 @@
   
   <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white">
   <img src="https://img.shields.io/badge/scikitlearn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white">
-  <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+  <img src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=MariaDB&logoColor=white">
   <img src="https://img.shields.io/badge/KakaoAPI-FFCD00?style=for-the-badge&logo=Kakao&logoColor=black">
   <img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
   <img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
@@ -51,7 +51,7 @@
 ### Server
 - Node.js 16.14.2
 - Express 4.18.1
-- MySQL 8.0.29-0ubuntu0.20.04.3
+- MariaDB 8.0.29-0ubuntu0.20.04.3
 - Nginx 1.23.1
 
 ### Client
