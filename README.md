@@ -1,25 +1,22 @@
 # 2022-02-OSSP1-BookDinosaur-3
 
-> 2022-02 공개SW프로젝트 A+
+=======
+> 2022-02 공개SW프로젝트 A+팀
+> 
+> BookDinosaur 프로젝트
+> 
+> 기존의 Read Lead 사이트를 보완
 >
-> READ LEAD
->
-> 독후감/서평 공유 및 도서 추천 플랫폼 개선
->
-> 원본 프로젝트: https://github.com/CSID-DGU/2022-01-OSSP1-NoHongchulRed-1
-
-## Demo Website
-
-> https://bookdinosaur.tk
+> https://bookdinosaur.tk/
 
 ## Team Member
 
-| 학번       | 이름   |
-| ---------- | ------ |
-| 2020112119 | 강동희 |
-| 2019113328 | 박근용 |
-| 2020110128 | 박지민 |
-| 2018112180 | 정대용 |
+|학번|이름|역할|
+|------|---|---|
+|2020112119|강동희|추천시스템알고리즘|
+|2019113328|박근용|보안|
+|2020110128|박지민|서버,데이터베이스|
+|2018112180|정대용|리팩토링,테스팅|
 
 ## Tech Stack
 
@@ -35,7 +32,7 @@
 
   <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white">
   <img src="https://img.shields.io/badge/scikitlearn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white">
-  <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+  <img src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=MariaDB&logoColor=white">
   <img src="https://img.shields.io/badge/KakaoAPI-FFCD00?style=for-the-badge&logo=Kakao&logoColor=black">
   <img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
   <img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
@@ -51,14 +48,38 @@
 
 ### Server
 
--   Node.js 16.14.2
--   Express 4.18.1
--   MySQL 8.0.29-0ubuntu0.20.04.3
--   Nginx 1.23.1
+- Node.js 16.14.2
+- Express 4.18.1
+- MariaDB 8.0.29-0ubuntu0.20.04.3
+- Nginx 1.23.1
 
 ### Client
+- React 17.0.2
 
--   React 17.0.2
+
+## Main Feature
+
+### Recommend System
+
+**1. SVD recommend system**
+- 유저-평점 행렬을 SVD 분해하여 특이값을 얻어내고, 이를 바탕으로 예측 평점 계산
+- 계산한 예측 평점이 높은 순으로 추천 도서 제공
+<img src="https://user-images.githubusercontent.com/83688807/173960562-afb2069b-cc08-458e-85cc-069bad0d8a8a.png"  width="30%" height="30%"/>
+<br>
+
+**2. Cosine Similarity recommend system**
+- 회원가입 시 유저에게 도서 분류별 관심도 정보 받아 계산
+- 방향적인 유사도 정보를 위해 코사인 유사도 활용
+- 나와 유사한 집합에서 평점 평균이 높은 순으로 추천 도서 제공
+<img src="https://user-images.githubusercontent.com/83688807/173960573-b8d0cefb-c71b-4b0f-817f-8a7f17a1131b.png"  width="30%" height="30%"/>
+
+
+### Page
+**1. Login page**
+
+![Loginpage](https://user-images.githubusercontent.com/83688807/173960048-0095d697-658e-4765-8e64-bbf409d9fe81.PNG)
+- 아이디와 비밀번호를 사용하여 로그인
+<br>
 
 ## Requirements
 
