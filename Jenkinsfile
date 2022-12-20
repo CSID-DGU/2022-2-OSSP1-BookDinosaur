@@ -8,7 +8,8 @@ node {
         remote.user = userName
         remote.identityFile = identity
         stage("SSH Steps Rocks!") {
-            sshCommand remote: remote, command: 'cd 2022-2-OSSP1-BookDinosaur-3; docker compose up --build; done'
+            sshCommand remote: remote, command: 'cd 2022-2-OSSP1-BookDinosaur-3'
+            sshCommand remote: remote, command: 'sudo docker compose up --build'
         }
     }
 }

@@ -1,14 +1,13 @@
 # 2022-02-OSSP1-BookDinosaur-3
+
+=======
 > 2022-02 공개SW프로젝트 A+팀
 > 
 > BookDinosaur 프로젝트
 > 
 > 기존의 Read Lead 사이트를 보완
-
-
-## Demo Website
+>
 > https://bookdinosaur.tk/
-
 
 ## Team Member
 
@@ -19,8 +18,8 @@
 |2020110128|박지민|서버,데이터베이스|
 |2018112180|정대용|리팩토링,테스팅|
 
-
 ## Tech Stack
+
 <div align=center>
   <img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white">
   <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white">
@@ -30,7 +29,7 @@
   <img src="https://img.shields.io/badge/MUI-2196F3?style=for-the-badge&logo=MUI&logoColor=white">
   <img src="https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=Express&logoColor=white">
   <br>
-  
+
   <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white">
   <img src="https://img.shields.io/badge/scikitlearn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white">
   <img src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=MariaDB&logoColor=white">
@@ -39,16 +38,16 @@
   <img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
   <img src="https://img.shields.io/badge/oracle cloud-F80000?style=for-the-badge&logo=oracle&logoColor=white">
   <br>
-  
+
   <img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=for-the-badge&logo=Visual Studio Code&logoColor=white">
   <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
   <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 </div>
 
-
 ## Environment
 
 ### Server
+
 - Node.js 16.14.2
 - Express 4.18.1
 - MariaDB 8.0.29-0ubuntu0.20.04.3
@@ -82,58 +81,72 @@
 - 아이디와 비밀번호를 사용하여 로그인
 <br>
 
-**2. Sign up page**
-
-![Signuppage](https://user-images.githubusercontent.com/83688807/173960058-e322d147-6ecc-48ee-87c3-3e47e03557ad.PNG)
-- 회원 정보 입력하여 회원가입
-<br>
-
-**3. Main page**
-
-![Mainpage](https://user-images.githubusercontent.com/83688807/173960125-a72ddfd8-523a-4910-8107-9cf6dce90057.PNG)
-- 인기 독후감 제공(조회수 기준)
-- 책 검색 기능
-<br>
-
-**4. Book search page**
-
-![Booksearchpage](https://user-images.githubusercontent.com/83688807/173960362-f2199be6-eb64-400c-9c91-c7a2f107f029.PNG)
-- 독후감 작성 및 독후감 모아보기 가능
-<br>
-
-**5. Edit page**
-
-![Editpage](https://user-images.githubusercontent.com/83688807/173960200-cef5c654-d6b1-499e-8d72-7d4b9b7ab4ec.PNG)
-- 독후감 작성 기능
-<br>
-
-**6. Gather report page**
-
-![Gatherreportpage](https://user-images.githubusercontent.com/83688807/173960287-25b850d3-383e-4c71-9c4e-f71b6f997508.PNG)
-- 독후감 정보 확인 기능
-<br>
-
-**7. All report page**
-
-![Allreportpage](https://user-images.githubusercontent.com/83688807/173960296-7e9c5b2d-098e-41e0-b1e8-38c5cc24abd9.PNG)
-- 전체 유저의 독후감 조회 기능
-<br>
-
-**8. My book page**
-
-![Mybookpage](https://user-images.githubusercontent.com/83688807/173960308-6e80adff-aa17-452b-86ed-e778e2486e62.PNG)
-- 나의 독후감 조회 기능
-<br>
-
-**9. Recommend page**
-
-![Recommendpage](https://user-images.githubusercontent.com/83688807/173960324-605b01fe-1d10-4372-9a43-c80012327257.PNG)
-- 추천 시스템 기능(svd/cos)
-
-
 ## Requirements
-- 주어진 API에 맞는 DB 서버(server/Router 참고)
-- 카카오 API 키, DB 설정값, 세션 secret 정보 관련 환경변수 파일(.env)
 
-(해당 사항은 본 리포지토리에서 제공되지 않으며 개별적으로 준비해야 함)
+-   주어진 API에 맞는 DB 서버
+-   카카오 API 키, DB 설정값, 세션 secret 정보 관련 환경변수 파일(.env)
 
+### .env 원형
+
+```
+PUBLIC_URL=
+SESSION_SECRET=
+PORT=3000
+
+# DATABASE(MARIADB)
+MARIADB_ROOT_PASSWORD=
+MARIADB_USER=
+MARIADB_PASSWORD=
+TZ=Asia/Seoul
+
+DB_PORT=3306
+DB_NAME=BOOKWEB
+DB_HOST=database
+
+# KAKAO
+KAKAO_API_KEY=
+```
+
+### DB Schema
+
+```
+CREATE DATABASE BOOKWEB;
+
+USE BOOKWEB;
+
+CREATE TABLE BookTB (
+    Id INT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    information VARCHAR(100) NOT NULL,
+    genres VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE UserTB (
+    userid VARCHAR(25) PRIMARY KEY,
+    password VARCHAR(60) NOT NULL,
+    nickname VARCHAR(25) NOT NULL,
+    age INT NOT NULL,
+    sexuality VARCHAR(25) NOT NULL,
+    preference VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE BookReportTB (
+    userid VARCHAR(25) NOT NULL,
+    isbn VARCHAR(24) NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    contents VARCHAR(300) NOT NULL,
+    rating VARCHAR(5) NOT NULL,
+    date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    views INT NOT NULL DEFAULT 0,
+    CONSTRAINT FK_userid
+    FOREIGN KEY (userid) REFERENCES UserTB (userid),
+    CONSTRAINT FK_isbn
+    FOREIGN KEY (isbn) REFERENCES BookTB (isbn)
+);
+
+CREATE TABLE RatingTB (
+    User_id INT PRIMARY KEY,
+    book_id INT NOT NULL,
+    Rating INT NOT NULL
+);
+```

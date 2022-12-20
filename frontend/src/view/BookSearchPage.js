@@ -34,7 +34,7 @@ function BookSearchPage() {
                           return (
                               <div key={index}>
                                   <SearchResultCard
-                                      thumbnail={data.thumbnail_M}
+                                      thumbnail={data.thumbnail}
                                       title={data.title}
                                       authors={data.authors}
                                       publisher={data.publisher}
