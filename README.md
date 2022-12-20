@@ -9,6 +9,9 @@
 >
 > https://bookdinosaur.tk/
 
+
+
+
 ## Team Member
 
 |학번|이름|역할|
@@ -17,6 +20,9 @@
 |2019113328|박근용|보안|
 |2020110128|박지민|서버,데이터베이스|
 |2018112180|정대용|리팩토링,테스팅|
+
+
+
 
 ## Tech Stack
 
@@ -48,6 +54,9 @@
   <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 </div>
 
+
+
+
 ## Environment
 
 ### Server
@@ -62,6 +71,8 @@
 - React 17.0.2
 
 
+
+
 ## Main Feature
 
 ### Recommend System
@@ -72,8 +83,8 @@
 <br>
 
 **2. Neural Network recommend system**
-
-
+<br>
+<br>
 ### Page
 **1. Login page**
 
