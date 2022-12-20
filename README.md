@@ -51,11 +51,12 @@
 ## Environment
 
 ### Server
-
-- Node.js 16.14.2
+- Nginx 1.18.0 (Ubuntu)
+- Node.js 18.12.1
 - Express 4.18.1
-- MariaDB 8.0.29-0ubuntu0.20.04.3
-- Nginx 1.23.1
+
+### Database
+- MariaDB 10.10.2 ~ Ubuntu 0.22.04 
 
 ### Client
 - React 17.0.2
@@ -65,17 +66,12 @@
 
 ### Recommend System
 
-**1. SVD recommend system**
-- 유저-평점 행렬을 SVD 분해하여 특이값을 얻어내고, 이를 바탕으로 예측 평점 계산
-- 계산한 예측 평점이 높은 순으로 추천 도서 제공
-<img src="https://user-images.githubusercontent.com/83688807/173960562-afb2069b-cc08-458e-85cc-069bad0d8a8a.png"  width="30%" height="30%"/>
+**1. Hybrid recommend system**
+- 복수의 알고리즘이 계산한 개별 사용자의 개별 아이템에 대한 예측치 모두 규칙으로 결합
+- 전체 사용자의 평점을 바탕으로 개별 사용자의 평점 데이터 사용
 <br>
 
-**2. Cosine Similarity recommend system**
-- 회원가입 시 유저에게 도서 분류별 관심도 정보 받아 계산
-- 방향적인 유사도 정보를 위해 코사인 유사도 활용
-- 나와 유사한 집합에서 평점 평균이 높은 순으로 추천 도서 제공
-<img src="https://user-images.githubusercontent.com/83688807/173960573-b8d0cefb-c71b-4b0f-817f-8a7f17a1131b.png"  width="30%" height="30%"/>
+**2. Neural Network recommend system**
 
 
 ### Page
